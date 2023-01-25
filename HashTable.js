@@ -1,10 +1,12 @@
 class HashTable {
+
     constructor() {
-        this.table = new Array(127);
+        this.table = new Array(10);
         this.size = 0;
     }
 
-    _hash(key) {
+    // Ideally a private method (_hash)
+    hash(key) {
         let hash = 0;
         for (let i = 0; i < key.length; i++) {
             hash += key.charCodeAt(i);
@@ -13,18 +15,18 @@ class HashTable {
     }
 
     set(key, value) {
-        const index = this._hash(key);
+        const index = this.hash(key);
         this.table[index] = [key, value];
         this.size++;
     }
 
     get(key) {
-        const target = this._hash(key);
+        const target = this.hash(key);
         return this.table[target];
     }
 
     remove(key) {
-        const index = this._hash(key);
+        const index = this.hash(key);
 
         if (this.table[index] && this.table[index].length) {
             this.table[index] = [];
@@ -35,3 +37,7 @@ class HashTable {
         }
     }
 }
+
+let map = new HashTable();
+map.set("bruh", 10);
+console.log(map.get("bruh"));
