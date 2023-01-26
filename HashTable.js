@@ -39,5 +39,3 @@ class HashTable {
 }
 
 let map = new HashTable();
-map.set("bruh", 10);
-console.log(map.get("bruh"));
