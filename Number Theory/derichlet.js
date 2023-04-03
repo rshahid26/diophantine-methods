@@ -1,40 +1,31 @@
 /**
- * Approximates any real number using the smallest possible integers p, q
- * where p / q is within "error" distance of a real number.
+ * Approximates any real number using integer values p, q where
+ * p / q is within "error" distance of the real number.
+ *
+ * Uses Derichlet's Approximation Theorem to find the qth multiple of
+ * the real number within 1/qN of the nearest integer. q's existence
+ * is guaranteed by the pigeonhole principle.
  */
 function derichletApproximation(realNum, error) {
     let limit = Math.round(1 / error);
+    let fractionals = [];
 
     while (true) {
-        const multiples = findMultiple(realNum, limit, error);
+        for (let i = 0; i < limit; i++) fractionals[i] = (realNum * i) % 1;
 
-        if (multiples !== undefined) {
-
-            const multiple = Object.keys(multiples)[0];
-            return Math.round(multiples[multiple]) + " / " + multiple +
-                " (within " + error + ")";
+        for (let i = 0; i < limit; i++) {
+            for (let j = i + 1; j <= limit; j++) {
+                if (Math.abs(fractionals[i] - fractionals[j]) < (Math.abs(i - j) / limit)) {
+                    const q = j - i;
+                    const p = Math.round(q * realNum);
+                    return p + " / " + q + " (within " + error + ")";
+                }
+            }
         }
         limit++;
     }
 }
-/**
- * Finds qth multiple of a real number using Derichlet's approximation theorem.
- */
-function findMultiple(realNum, limit, error) {
 
-    let fractionals = new Array(limit);
-    error = !error || error > 1 / 1_000_000 ? 1_000_000 : Math.round(1 / error);
-
-    for (let i = 0; i < limit; i++) fractionals[i] = (realNum * i) % 1;
-
-    for (let i = 0; i < limit; i++) {
-        for (let j = i + 1; j <= limit; j++) {
-
-            if (Math.abs(fractionals[i] - fractionals[j]) < (Math.abs(i - j) / limit))
-                return {[Math.abs(i - j)] : Math.round(realNum * Math.abs(i - j) * error) / error};
-        }
-    }
-}
 /**
  * Finds the most optimal rational approximation of any real number using
  * a converging sequence of continued fractions.
@@ -46,7 +37,6 @@ function continuedApproximation(realNum, error) {
 
     let notation = [];
     let fractional = realNum;
-
     notation.push(Math.floor(realNum));
 
     while (true) {
@@ -77,5 +67,10 @@ function euclideanAlgorithm(a, b) {
     else return euclideanAlgorithm(b, a % b);
 }
 
-console.log(derichletApproximation(Math.PI, 0.00009));
-console.log(continuedApproximation(Math.PI, 0.00009));
+
+
+const x = Math.PI;
+const t = .01;
+
+console.log(derichletApproximation(x, t));
+console.log(continuedApproximation(x, t));
