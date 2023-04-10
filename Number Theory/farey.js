@@ -1,4 +1,4 @@
-// Asymptotic bound for the length of a Farey Sequence of size n.
+// Asymptotic bound for the length of a Farey sequence of size n.
 export const fareyAsymptote = (n) => Math.round(3 * Math.pow(n, 2) / Math.pow(Math.PI, 2));
 
 /**
@@ -18,7 +18,6 @@ function getFareySequenceBF(n, order) {
     }
     return sequence.sort(order || fractionsAscending);
 }
-
 
 /**
  * Returns the Farey sequence of size n, this time using the mediant
