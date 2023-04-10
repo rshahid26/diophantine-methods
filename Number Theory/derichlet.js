@@ -1,3 +1,5 @@
+import { euclideanAlgorithm } from "./farey.js"
+
 /**
  * Approximates any real number using integer values p, q where
  * p / q is within "epsilon" distance of the real number.
