@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "n": "node \"Number Theory/derichlet.js\"",
+    "f": "node \"Number Theory/farey.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
