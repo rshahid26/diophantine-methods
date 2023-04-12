@@ -1,3 +1,5 @@
+import { euclideanAlgorithm } from "./factor.js"
+
 // Asymptotic bound for the length of a Farey sequence of size n.
 export const fareyAsymptote = (n) => Math.round(3 * Math.pow(n, 2) / Math.pow(Math.PI, 2));
 
@@ -40,11 +42,6 @@ export function getFareySequence(n) {
         else index++;
     }
     return sequence;
-}
-
-export function euclideanAlgorithm(a, b) {
-    if (b === 0) return a;
-    else return euclideanAlgorithm(b, a % b);
 }
 
 export function fractionsAscending(frac1, frac2) {
@@ -112,9 +109,4 @@ export function fareyApproximation(realNum, n) {
 
         else record = distance(sequence[i]);
     }
-}
-
-function factorial(n) {
-    if (n === 0) return 1;
-    else return n * factorial(n - 1);
 }

@@ -1,4 +1,4 @@
-import { euclideanAlgorithm } from "./farey.js"
+import { euclideanAlgorithm } from "./factor.js"
 
 /**
  * Approximates any real number using integer values p, q where
