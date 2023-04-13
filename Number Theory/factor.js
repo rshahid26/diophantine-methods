@@ -1,10 +1,22 @@
-export function euclideanAlgorithm(a, b) {
-    if (b === 0) return a;
-    else return euclideanAlgorithm(b, a % b);
+export function euclideanAlgorithm(...values) {
+    function binaryEuclidean(a, b) {
+        if (b === 0) return a;
+        else return binaryEuclidean(b, a % b);
+    }
+
+    let result = values[0];
+    for (let i = 1; i < values.length; i++)
+        result = binaryEuclidean(result, values[i]);
+
+    return result;
 }
 
-export function leastCommonMultiple(a, b) {
-    return a * b / euclideanAlgorithm(a, b);
+export function leastCommonMultiple(...values) {
+    let result = values[0];
+    for (let i = 1; i < values.length; i++)
+        result = result * values[i] / euclideanAlgorithm(result, values[i]);
+
+    return result;
 }
 
 export function primeFactorizationBF(a) {
@@ -27,7 +39,6 @@ function factorial(n) {
     else return n * factorial(n - 1);
 }
 
-
 export function primeFactorizationR(a, primeFactors = []) {
     if (a === 1) return primeFactors;
     else {
@@ -39,4 +50,30 @@ export function primeFactorizationR(a, primeFactors = []) {
     }
 }
 
-console.log(primeFactorizationR(factorial(24)));
+/**
+ * An implementation of Fermat Factorization using the one-to-one
+ * correspondence of odd integers and differences of squares.
+ *
+ * Guaranteed to terminate as, for all n, n = 1 * n which equals
+ * ((n-1)/2) * ((n+1)/2), a non-trivial factorization.
+ */
+function fermatFactorization(n) {
+    if (n % 2 === 0) return "Odd composite integers only."
+
+    let x = Math.ceil(Math.sqrt(n))
+    while (true) {
+        const t = Math.sqrt(x * x - n);
+
+        if (t === Math.floor(t)) return [x + t, x - t];
+        else x++;
+    }
+}
+
+function isPerfectSquare(num) {
+    const sqrt = Math.sqrt(num);
+    return sqrt === Math.floor(sqrt);
+}
+
+function fermatNumber(n) {
+    return Math.pow(2, Math.pow(2, n)) + 1;
+}
