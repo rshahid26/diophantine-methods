@@ -1,18 +1,27 @@
 import { euclideanAlgorithm } from "./factor.js";
 
-function binaryEuclidean(a, b) {
-    let gcfDividend = 1;
-    if (b === 0) return a;
+function getEuclideanHistory(a, b, remainders = []) {
+    if (b === 0) return remainders;
     else {
-        gcfDividend = Math.floor(a / b);
-        console.log(gcfDividend);
-        return binaryEuclidean(b, a % b);
+        remainders.push([a % b, a, b, -Math.floor(a / b)]);
+        return getEuclideanHistory(b, a % b, remainders);
+    }
+}
 
+function bezoutCoefficients(a, b) {
+    if (b === 0) return { gcd: a, x: 1, y: 0 };
+    else {
+        const { gcd, x, y } = bezoutCoefficients(b, a % b);
+        // noinspection JSSuspiciousNameCombination
+            return {
+            gcd: gcd,
+            x: y,
+            y: x - y * Math.floor(a / b),
+        };
     }
 }
 
 function parseLinearEquation(equation) {
-
     let modifiedEquation = equation.replace(/[a-zA-Z]/g, (match, index) => {
         if (index === equation.indexOf(equation.match(/[a-zA-Z]/g)[0])) return "x";
         else if (index === equation.indexOf(equation.match(/[a-zA-Z]/g)[1])) return "y";
@@ -20,8 +29,6 @@ function parseLinearEquation(equation) {
 
     const cleanInput = modifiedEquation.match(/(-?\d*)x\s*([+\-]\s*\d*)y\s*=\s*(-?\d+)/);
     if (!cleanInput) throw new Error ("Invalid equation format.");
-
-    console.log(cleanInput);
 
     const xCo = parseInt(cleanInput[1] || "1", 10);
     const yCo = parseInt(cleanInput[2].replace(/\s+/g, ""), 10);
@@ -31,15 +38,11 @@ function parseLinearEquation(equation) {
 }
 
 function solveLinearEquation(equation) {
-    let [xCo, yCo, solution] = parseLinearEquation(equation);
+    const [xCo, yCo, solution] = parseLinearEquation(equation);
+    const { gcd, x, y } = bezoutCoefficients(xCo, yCo);
 
-    let s = 0, t = 1;
-    while (xCo !== 0) {
-        [s, t, xCo, yCo] = [t, s - Math.floor(yCo / xCo) * t, yCo % xCo, xCo];
-    }
-
-    return [yCo, -Math.floor((solution - xCo * t) / yCo)];
+    if (solution % gcd !== 0) return "No solutions";
+    return [parseInt(x * (solution / gcd)), parseInt(y * (solution / gcd))];
 }
 
-console.log(solveLinearEquation("23A + 10B = 10")); // 1, 7
-//console.log(binaryEuclidean(51, 4));
+console.log(solveLinearEquation("15A - 10B = 25"));
