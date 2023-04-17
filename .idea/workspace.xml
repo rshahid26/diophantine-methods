@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecd8d43e-c80a-405d-be2d-f52180a2bd9d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HashTable.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LinkedList.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/image.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pixel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vxx%20vxxiv.PNG" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +94,7 @@
       <workItem from="1681641606821" duration="16083000" />
       <workItem from="1681716335349" duration="129000" />
       <workItem from="1681716487912" duration="183000" />
-      <workItem from="1681718831333" duration="132000" />
+      <workItem from="1681718831333" duration="451000" />
     </task>
     <servers />
   </component>

@@ -1,8 +1,8 @@
 {
-  "name": "data-structures",
+  "name": "diophantine",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "Number Theory/LinearDiophantine.js",
   "scripts": {
     "n": "node \"Number Theory/derichlet.js\"",
     "f": "node \"Number Theory/farey.js\"",
@@ -14,11 +14,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rshahid26/data-structures.git"
+    "url": "git+https://github.com/rshahid26/diophantine.git"
   },
   "bugs": {
-    "url": "https://github.com/rshahid26/data-structures/issues"
+    "url": "https://github.com/rshahid26/diophantine/issues"
   },
-  "homepage": "https://github.com/rshahid26/data-structures#readme",
+  "homepage": "https://github.com/rshahid26/diophantine#readme",
   "description": ""
 }
