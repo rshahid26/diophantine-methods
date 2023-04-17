@@ -5,7 +5,6 @@ class HashTable {
         this.size = 0;
     }
 
-    // Ideally a private method (_hash)
     hash(key) {
         let hash = 0;
         for (let i = 0; i < key.length; i++) {

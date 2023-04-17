@@ -1,7 +1,15 @@
+/**
+ * Calculates the remainder of a division between two integers
+ * such that 0 <= remainder < b. No surprises unlike '%'
+ */
+export function mod(a, b) {
+    return ((a % b) + b) % b;
+}
+
 export function euclideanAlgorithm(...values) {
     function binaryEuclidean(a, b) {
         if (b === 0) return a;
-        else return binaryEuclidean(b, a % b);
+        else return binaryEuclidean(b, mod(a, b));
     }
 
     let result = values[0];
