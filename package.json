@@ -1,7 +1,6 @@
 {
   "name": "data-structures",
   "version": "1.0.0",
-  "description": "",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -12,5 +11,14 @@
   },
   "keywords": [],
   "author": "RS",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rshahid26/data-structures.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rshahid26/data-structures/issues"
+  },
+  "homepage": "https://github.com/rshahid26/data-structures#readme",
+  "description": ""
 }
