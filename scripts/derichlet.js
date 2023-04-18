@@ -8,7 +8,7 @@ import { euclideanAlgorithm } from "./factor.js"
  * the real number within 1/qN of the nearest integer. q's existence
  * is guaranteed by the pigeonhole principle.
  */
-function derichletApproximation(realNum, epsilon) {
+export function derichletApproximation(realNum, epsilon) {
     let limit = Math.round(1 / epsilon);
     let fractionals = [];
 
@@ -35,7 +35,7 @@ function derichletApproximation(realNum, epsilon) {
  * Terminates when the approximation is within "epsilon" distance of the
  * real number.
  */
-function continuedApproximation(realNum, epsilon) {
+export function continuedApproximation(realNum, epsilon) {
 
     let notation = [];
     let fractional = realNum;

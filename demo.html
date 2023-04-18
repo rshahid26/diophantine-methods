@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diophantine</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div style="width: 50%;">
+    <form>
+        <input type="text" id="equation" name="equation" placeholder="Ex: 3x + 7y = 12">
+        <button type="submit">Submit</button>
+    </form>
+    <p id="chart_fallback"></p>
+    <div id="chart_container">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+</body>
+<script type="module" src="./scripts/LinearDiophantine.js"></script>
+<script type="module" src="./demo.js"></script>
+</html>

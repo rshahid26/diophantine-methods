@@ -2,11 +2,11 @@
   "name": "diophantine",
   "version": "1.0.0",
   "type": "module",
-  "main": "Number Theory/LinearDiophantine.js",
+  "main": "scripts/LinearDiophantine.js",
   "scripts": {
-    "n": "node \"Number Theory/derichlet.js\"",
-    "f": "node \"Number Theory/farey.js\"",
-    "l": "node \"Number Theory/LinearDiophantine.js\"",
+    "n": "node scripts/derichlet.js",
+    "f": "node scripts/farey.js",
+    "l": "node scripts/LinearDiophantine.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

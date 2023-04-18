@@ -18,7 +18,7 @@ function getEuclideanHistory(a, b, remainders = []) {
  *
  * Returns an object containing the GCD and coefficients.
  */
-function bezoutCoefficients(a, b) {
+export function bezoutCoefficients(a, b) {
     if (b === 0) return { gcd: a, x: 1, y: 0 };
     else {
         const { gcd, x, y } = bezoutCoefficients(b, mod(a, b));
@@ -57,31 +57,31 @@ function parseLinearEquation(equation) {
  * scaled by (c / GCD), as well as the set of all solutions,
  * being a parameterized linear equation.
  */
-function solveLinearEquation(equation) {
+export function solveLinearEquation(equation) {
     const { xCo, xName, yCo, yName, solution} = parseLinearEquation(equation);
     const { gcd, x, y } = bezoutCoefficients(xCo, yCo);
 
-    if (solution % gcd !== 0) return "No solutions";
-    const xOrigin = parseInt(x * (solution / gcd));
-    const yOrigin = parseInt(y * (solution / gcd));
+    if (solution % gcd !== 0) return {};
+    const xOrigin = Number(x * (solution / gcd));
+    const yOrigin = Number(y * (solution / gcd));
 
     return {
         [xName]: xOrigin,
         [yName]: yOrigin,
         set: {
-            [xName]: `${xOrigin} ${yCo / gcd >= 0 ? "+" : "-"} ${Math.abs(parseInt(yCo / gcd))}t`,
-            [yName]: `${yOrigin} ${yCo / gcd >= 0 ? "+" : "-"} ${Math.abs(parseInt(xCo / gcd))}t`
+            [xName]: `${xOrigin} ${yCo / gcd >= 0 ? "+" : "-"} ${Math.abs(Number(yCo / gcd))}t`,
+            [yName]: `${yOrigin} ${yCo / gcd >= 0 ? "-" : "+"} ${Math.abs(Number(xCo / gcd))}t`
         }
     }
 }
 
-function printLinearSolution(equation) {
-    const { xCo, xName, yCo, yName, solution} = parseLinearEquation(equation);
+export function printLinearSolution(equation) {
+    const { xCo, yCo, solution} = parseLinearEquation(equation);
     const { gcd, x, y } = bezoutCoefficients(xCo, yCo);
 
     console.log(
-        xCo + "(" + parseInt(x * (solution / gcd)) + ") + " +
-        yCo + "(" + parseInt(y * (solution / gcd)) + ") = " +
+        xCo + "(" + Number(x * (solution / gcd)) + ") + " +
+        yCo + "(" + (y * (solution / gcd)) + ") = " +
         solution
     );
 }

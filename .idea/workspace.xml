@@ -2,7 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ecd8d43e-c80a-405d-be2d-f52180a2bd9d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/demo.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/congruence.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/HashTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/HashTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/LinearDiophantine.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/LinearDiophantine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/NonLinearDiophantine.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/congruence.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/NonLinearDiophantine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/derichlet.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/derichlet.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/factor.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/factor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/farey.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/farey.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/integral.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/integral.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Number Theory/totient.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/totient.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,12 +41,12 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Number Theory/farey.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Number Theory/factor.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Number Theory/derichlet.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Number Theory/LinearDiophantine.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Number Theory/integral.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Number Theory/totient.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/scripts/farey.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/scripts/integral.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/scripts/totient.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/scripts/LinearDiophantine.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/scripts/factor.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/scripts/derichlet.js" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -95,6 +106,7 @@
       <workItem from="1681716335349" duration="129000" />
       <workItem from="1681716487912" duration="183000" />
       <workItem from="1681718831333" duration="451000" />
+      <workItem from="1681719561175" duration="6479000" />
     </task>
     <servers />
   </component>
