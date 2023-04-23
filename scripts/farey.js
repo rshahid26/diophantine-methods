@@ -110,3 +110,4 @@ export function fareyApproximation(realNum, n) {
         else record = distance(sequence[i]);
     }
 }
+

@@ -7,7 +7,7 @@
     "n": "node scripts/derichlet.js",
     "f": "node scripts/farey.js",
     "l": "node scripts/LinearDiophantine.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [],
   "author": "RS",
@@ -20,5 +20,8 @@
     "url": "https://github.com/rshahid26/diophantine/issues"
   },
   "homepage": "https://github.com/rshahid26/diophantine#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
 }

@@ -85,3 +85,5 @@ export function printLinearSolution(equation) {
         solution
     );
 }
+
+console.log(solveLinearEquation("4x + 10y = 22"));
