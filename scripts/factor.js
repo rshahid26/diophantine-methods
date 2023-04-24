@@ -57,7 +57,6 @@ export function primeFactorizationR(a, primeFactors = []) {
         return primeFactorizationR(a / i, primeFactors);
     }
 }
-
 /**
  * An implementation of Fermat Factorization using the one-to-one
  * correspondence of odd integers and differences of squares.
