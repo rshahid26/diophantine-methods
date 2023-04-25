@@ -1,5 +1,5 @@
-import { continuedApproximation } from "./scripts/derichlet.js";
-import { derichletApproximation } from "./scripts/derichlet.js";
+import { continuedApproximation } from "./scripts/dirichlet.js";
+import { dirichletApproximation } from "./scripts/dirichlet.js";
 import { fareyApproximation } from "./scripts/farey.js";
 import { solveLinearEquation } from "./scripts/LinearDiophantine.js";
 

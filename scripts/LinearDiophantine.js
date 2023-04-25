@@ -113,7 +113,6 @@ export function solveLinearEquation(equation) {
 }
 console.log(solveLinearEquation("32a + 48b + 24c + 6d = 2"));
 
-
 export function printLinearSolution(equation) {
     const { xCo, yCo, solution} = parseLinearEquation(equation);
     const { gcd, x, y } = bezoutCoefficients(xCo, yCo);

@@ -1,62 +1,68 @@
 export class Node {
-    constructor(data, next = null) {
+    constructor(data, prev = null, next = null) {
         this.data = data;
+        this.prev = prev;
         this.next = next;
     }
 }
 
 export class LinkedList {
     constructor(...data) {
-        this.head = new Node(data[0]);
-        if (data.length > 1)
-            for (let i = 1; i < data.length; i++) this.append(data[i]);
+        if (data.length === 0) this.head = null;
+        else {
+            this.head = new Node(data[0]);
+            if (data.length > 1)
+                for (let i = 1; i < data.length; i++) this.append(data[i]);
+        }
     }
 
     append(data) {
+        if (!this.head) {
+            this.head = new Node(data);
+            return;
+        }
+
         let current = this.head;
         while (current.next !== null) {
             current = current.next;
         }
 
-        current.next = new Node(data);
+        current.next = new Node(data, current);
     }
 
     prepend(data) {
-
-        let newHead = new Node(data);
-
-        newHead.next = this.head;
+        let newHead = new Node(data, null, this.head);
+        if (this.head) {
+            this.head.prev = newHead;
+        }
         this.head = newHead;
-
     }
 
     remove(data) {
-
-        if (this.head.data === data) {
-            this.head = this.head.next;
-        }
 
         let current = this.head;
         while (current.next !== null) {
 
             if (current.next.data === data) {
                 current.next = current.next.next;
+                current.next.prev = current;
                 continue;
             }
             current = current.next;
-
         }
+
+        if (this.head.data === data) {
+            this.head = this.head.next;
+            this.head.prev = null;
+        }
+
     }
 
     print() {
-
         let current = this.head;
         while (current !== null) {
-
             console.log(current.data);
             current = current.next;
-
         }
     }
-
 }

@@ -4,11 +4,11 @@ import { euclideanAlgorithm } from "./factor.js"
  * Approximates any real number using integer values p, q where
  * p / q is within "epsilon" distance of the real number.
  *
- * Uses Derichlet's Approximation Theorem to find the qth multiple of
+ * Uses dirichlet's Approximation Theorem to find the qth multiple of
  * the real number within 1/qN of the nearest integer. q's existence
  * is guaranteed by the pigeonhole principle.
  */
-export function derichletApproximation(realNum, epsilon) {
+export function dirichletApproximation(realNum, epsilon) {
     let limit = Math.round(1 / epsilon);
     let fractionals = [];
 
@@ -17,11 +17,8 @@ export function derichletApproximation(realNum, epsilon) {
 
         for (let i = 0; i < limit; i++) {
             for (let j = i + 1; j <= limit; j++) {
-                if (Math.abs(fractionals[i] - fractionals[j]) < (Math.abs(i - j) / limit)) {
-                    const q = j - i;
-                    const p = Math.round(q * realNum);
-                    return p + " / " + q + " (within " + epsilon + ")";
-                }
+                if (Math.abs(fractionals[i] - fractionals[j]) < (Math.abs(i - j) / limit))
+                    return [Math.round((j - i) * realNum), j - i];
             }
         }
         limit++;
@@ -36,7 +33,6 @@ export function derichletApproximation(realNum, epsilon) {
  * real number.
  */
 export function continuedApproximation(realNum, epsilon) {
-
     let notation = [];
     let fractional = realNum;
 
@@ -48,11 +44,7 @@ export function continuedApproximation(realNum, epsilon) {
 
         const fraction = evaluateContinuedFraction(notation, 0);
         if (Math.abs(fraction[0] / fraction[1] - realNum) < epsilon)
-            return {
-            "notation": notation,
-            "approximation": fraction[0] + "/" + fraction[1],
-            "epsilon": epsilon
-            };
+            return fraction;
     }
 }
 
@@ -68,5 +60,3 @@ function evaluateContinuedFraction(notation, index) {
         return [notation[index] * fraction[0] + fraction[1], fraction[0]];
     }
 }
-
-console.log(continuedApproximation(Math.PI, 0.0001));

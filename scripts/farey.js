@@ -1,7 +1,6 @@
 import { euclideanAlgorithm } from "./factor.js"
 import { LinkedList, Node } from "./LinkedList.js";
 
-
 // Asymptotic bound for the length of a Farey sequence of size n.
 export const fareyAsymptote = (n) => Math.round(3 * Math.pow(n, 2) / Math.pow(Math.PI, 2));
 
@@ -35,11 +34,11 @@ export function getFareySequence(n) {
     let sequence = new LinkedList([0, 1], [1, 1]);
 
     let current = sequence.head;
-    while (current !== null && current.next !== null) {
+    while (current.next !== null) {
         const [a, b] = current.data;
         const [c, d] = current.next.data;
 
-        if (b + d <= n) current.next = new Node([a + c, b + d], current.next);
+        if (b + d <= n) current.next = new Node([a + c, b + d], current, current.next);
         else current = current.next;
     }
 
@@ -92,25 +91,71 @@ export function getFareyNeighbors(numerator, denominator, n) {
 
 /**
  * Maps a given number to the unit interval and approximates it using
- * the nearest Farey fraction.
+ * the nearest Farey fraction. Brute force approach with complexity
+ * O(n^2), space complexity O(n^2).
  */
-export function fareyApproximation(realNum, n) {
-
+export function fareyApproximationBF(realNum, epsilon) {
     const fractional = realNum - Math.floor(realNum);
     const distance = (fraction) => {return Math.abs(fraction[0] / fraction[1] - fractional);}
 
-    const sequence = getFareySequence(n);
+    const sequence = getFareySequence(Math.ceil(1 / epsilon));
     let record = Number.MAX_VALUE;
+    let bestFraction = null;
 
-    for (let i = 0; i < sequence.length; i++) {
+    let current = sequence.head;
+    while (current !== null && current.next !== null) {
 
-        if (distance(sequence[i]) > record)
-            return distance(sequence[i - 1]) <= distance(sequence[i]) ?
-                [sequence[i - 1][0] + Math.floor(realNum) * sequence[i - 1][1], sequence[i - 1][1]] :
-                [sequence[i][0] + Math.floor(realNum) * sequence[i][1], sequence[i][1]];
+        if (distance(current.data) < record) bestFraction = current.data;
+        if (distance(current.data) < distance(current.next.data)) break;
 
-        else record = distance(sequence[i]);
+        record = distance(current.data);
+        current = current.next;
+    }
+    return [bestFraction[0] + Math.floor(realNum) * bestFraction[1], bestFraction[1]];
+}
+
+/** Uses a binary search for the farey fraction nearest some realNum
+ * in a Farey Sequence of size 1 / epsilon. Has time complexity O(logn) and
+ * space complexity O(1).
+ */
+export function nearestFareyFraction(realNum, epsilon) {
+    const fractional = realNum - Math.floor(realNum);
+    const distance = (fraction) => {return Math.abs(fraction[0] / fraction[1] - fractional);}
+
+    let [left, right] = [[0, 1], [1,1]];
+    while (true) {
+        const mediant = [(left[0] + right[0]), (left[1] + right[1])];
+
+        if (mediant[1] > Math.ceil(1 / epsilon)) {
+            const bestFraction = distance(left) <= distance(right) ? left : right;
+            return [bestFraction[0] + Math.floor(realNum) * bestFraction[1], bestFraction[1]];
+        }
+
+        if (distance(mediant) === 0) return [mediant[0] + Math.floor(realNum) * mediant[1], mediant[1]];
+        if (mediant[0] / mediant[1] < fractional) left = mediant;
+        else right = mediant;
     }
 }
 
-getFareySequence(58).print();
+/** Uses a binary search for the farey fraction within epsilon distance
+ * of a given realNum. Has worst case O(logn) in terms of the longest
+ * Farey Sequence required (being 1 / epsilon).
+ */
+export function fareyApproximation(realNum, epsilon) {
+    const fractional = realNum - Math.floor(realNum);
+    const distance = (fraction) => {return Math.abs(fraction[0] / fraction[1] - fractional);}
+
+    let [left, right] = [[0, 1], [1,1]];
+    while (true) {
+        const mediant = [(left[0] + right[0]), (left[1] + right[1])];
+
+        if (mediant[1] > Math.ceil(1 / epsilon)) {
+            const bestFraction = distance(left) <= distance(right) ? left : right;
+            return [bestFraction[0] + Math.floor(realNum) * bestFraction[1], bestFraction[1]];
+        }
+
+        if (distance(mediant) <= epsilon) return [mediant[0] + Math.floor(realNum) * mediant[1], mediant[1]];
+        if (mediant[0] / mediant[1] < fractional) left = mediant;
+        else right = mediant;
+    }
+}
