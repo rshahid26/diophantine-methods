@@ -1,4 +1,6 @@
 import { euclideanAlgorithm } from "./factor.js"
+import { LinkedList, Node } from "./LinkedList.js";
+
 
 // Asymptotic bound for the length of a Farey sequence of size n.
 export const fareyAsymptote = (n) => Math.round(3 * Math.pow(n, 2) / Math.pow(Math.PI, 2));
@@ -30,17 +32,17 @@ function getFareySequenceBF(n, order) {
  */
 export function getFareySequence(n) {
     if (n < 1) return [];
-    let sequence = [[0, 1], [1, 1]];
+    let sequence = new LinkedList([0, 1], [1, 1]);
 
-    let index = 0;
-    while (index < sequence.length - 1) {
+    let current = sequence.head;
+    while (current !== null && current.next !== null) {
+        const [a, b] = current.data;
+        const [c, d] = current.next.data;
 
-        const [a, b] = sequence[index];
-        const [c, d] = sequence[index + 1];
-
-        if (b + d <= n) sequence.splice(index + 1, 0, [a + c, b + d]);
-        else index++;
+        if (b + d <= n) current.next = new Node([a + c, b + d], current.next);
+        else current = current.next;
     }
+
     return sequence;
 }
 
@@ -111,3 +113,4 @@ export function fareyApproximation(realNum, n) {
     }
 }
 
+getFareySequence(58).print();

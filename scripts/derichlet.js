@@ -48,7 +48,11 @@ export function continuedApproximation(realNum, epsilon) {
 
         const fraction = evaluateContinuedFraction(notation, 0);
         if (Math.abs(fraction[0] / fraction[1] - realNum) < epsilon)
-            return fraction[0] + " / " + fraction[1] + " (within " + epsilon + ")";
+            return {
+            "notation": notation,
+            "approximation": fraction[0] + "/" + fraction[1],
+            "epsilon": epsilon
+            };
     }
 }
 
@@ -64,3 +68,5 @@ function evaluateContinuedFraction(notation, index) {
         return [notation[index] * fraction[0] + fraction[1], fraction[0]];
     }
 }
+
+console.log(continuedApproximation(Math.PI, 0.0001));
