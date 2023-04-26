@@ -137,9 +137,9 @@ export function nearestFareyFraction(realNum, epsilon) {
     }
 }
 
-/** Uses a binary search for the farey fraction within epsilon distance
- * of a given realNum. Has worst case O(logn) in terms of the longest
- * Farey Sequence required (being 1 / epsilon).
+/** Uses a binary search for a farey fraction within epsilon distance
+ * of realNum. Has worst case O(logn) where n is the length of the
+ * minimum Farey Sequence required (being 1 / epsilon).
  */
 export function fareyApproximation(realNum, epsilon) {
     const fractional = realNum - Math.floor(realNum);

@@ -54,7 +54,7 @@ fs.readFile(testData, 'utf-8', (err, data) => {
     else {
         const realNums = data.split('\n').map(Number);
         const epsilon = 0.000001;
-        const sample = 10000;
+        const sample = 100000;
 
         const lengths = [];
         lengths.push(simulate(continuedApproximation, realNums, epsilon, sample));
@@ -65,5 +65,3 @@ fs.readFile(testData, 'utf-8', (err, data) => {
         publish(lengths, epsilon, sample);
     }
 });
-
-
