@@ -7,7 +7,7 @@
     "d": "node scripts/dirichlet.js",
     "f": "node scripts/farey.js",
     "l": "node scripts/LinearDiophantine.js",
-    "b": "node bench/simulation.js",
+    "b": "node bench/simulations.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [],
