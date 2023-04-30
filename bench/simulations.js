@@ -29,6 +29,11 @@ function len(fraction) {
     return fraction[0].toString().length + fraction[1].toString().length;
 }
 
+function approximation(realNum, epsilon) {
+    if (epsilon < 1) return [Math.trunc(realNum / epsilon), 1 / epsilon];
+    if (epsilon >= 1) return [Math.trunc(realNum / epsilon) * epsilon, 1];
+}
+
 function simulate(method, realNums, epsilon, sample = realNums.length) {
     const lengths = [];
 
@@ -85,12 +90,12 @@ function getRateOfConvergence(realNums, epsilon, sample = realNums.length) {
 //     }
 // });
 
-fs.readFile(testData, 'utf-8', (err, data) => {
-    if (err) console.error(err);
-    else {
-        const realNums = data.split('\n').map(Number);
-        const epsilon = 0.000001;
-        const sample = 100000;
-        console.log(getRateOfConvergence(realNums, epsilon, sample));
-    }
-});
+// fs.readFile(testData, 'utf-8', (err, data) => {
+//     if (err) console.error(err);
+//     else {
+//         const realNums = data.split('\n').map(Number);
+//         const epsilon = 0.000001;
+//         const sample = 100000;
+//         console.log(getRateOfConvergence(realNums, epsilon, sample));
+//     }
+// });

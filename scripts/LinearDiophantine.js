@@ -87,31 +87,50 @@ export function solveLinearEquation(equation) {
     const bezoutArray = bezoutCoefficients(...Object.values(variables));
     const gcd = euclideanAlgorithm(...Object.values(variables));
 
-    if (solution % gcd !== 0) return {};
-    let object = {set: {}, leastPositive: {}};
+    solver(Object.values(variables), solution);
 
-    let index = 0;
-    for (const key in variables) {
-        const keyOrigin = Number(bezoutArray[index] * (solution / gcd));
-        object[key] = keyOrigin;
-
-        object["set"][key] = `${keyOrigin} ${variables.d / gcd >= 0 ? "+" : "-"} ${Math.abs(Number(variables.d / gcd))}t`;
-        index++;
-    }
-    // const xOrigin = Number(x * (solution / gcd));
-    // const yOrigin = Number(y * (solution / gcd));
+    // if (solution % gcd !== 0) return {};
+    // let object = {set: {}};
+    // let index = 0;
+    // for (const key in variables) {
+    //     const keyOrigin = Number(bezoutArray[index] * (solution / gcd));
+    //     object[key] = keyOrigin;
     //
-    // return {
-    //     [xName]: xOrigin,
-    //     [yName]: yOrigin,
-    //     set: {
-    //         [xName]: `${xOrigin} ${yCo / gcd >= 0 ? "+" : "-"} ${Math.abs(Number(yCo / gcd))}t`,
-    //         [yName]: `${yOrigin} ${yCo / gcd >= 0 ? "-" : "+"} ${Math.abs(Number(xCo / gcd))}t`
-    //     }
+    //     index++;
     // }
-    return object;
+    // return object;
 }
+
+export function solver(vars, solution) {
+    if (vars.length === 2) {
+        const bezoutArray = bezoutCoefficients(vars);
+        const gcd = euclideanAlgorithm(vars);
+
+        return [
+            [Number(bezoutArray[0] * (solution / gcd)),Math.abs(Number(vars[1] / gcd))],
+            [Number(bezoutArray[1] * (solution / gcd)),Math.abs(Number(vars[0] / gcd))]];
+    }
+    else {
+        solver([euclideanAlgorithm(vars[0], vars[1]), ...vars.splice(2)], solution);
+        return "test";
+    }
+}
+
 console.log(solveLinearEquation("32a + 48b + 24c + 6d = 2"));
+
+// object["set"][key] = `${keyOrigin} ${variables.d / gcd >= 0 ? "+" : "-"} ${Math.abs(Number(variables.d / gcd))}t`;
+
+// const xOrigin = Number(x * (solution / gcd));
+// const yOrigin = Number(y * (solution / gcd));
+//
+// return {
+//     [xName]: xOrigin,
+//     [yName]: yOrigin,
+//     set: {
+//         [xName]: `${xOrigin} ${yCo / gcd >= 0 ? "+" : "-"} ${Math.abs(Number(yCo / gcd))}t`,
+//         [yName]: `${yOrigin} ${yCo / gcd >= 0 ? "-" : "+"} ${Math.abs(Number(xCo / gcd))}t`
+//     }
+// }
 
 export function printLinearSolution(equation) {
     const { xCo, yCo, solution} = parseLinearEquation(equation);

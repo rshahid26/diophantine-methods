@@ -1,8 +1,4 @@
 import { euclideanAlgorithm } from "./factor.js"
-export function longestApproximation(realNum, epsilon) {
-    if (epsilon < 1) return [Math.trunc(realNum / epsilon), 1 / epsilon];
-    if (epsilon >= 1) return [Math.trunc(realNum / epsilon) * epsilon, 1];
-}
 
 /**
  * Approximates any real number using integer values p, q where
