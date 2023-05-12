@@ -7,7 +7,7 @@ import { nearestFareyFraction } from "../scripts/farey.js";
 const testData = "bench/testdata.txt";
 const output = "bench/output.txt";
 
-function generateRealNums(count, min, max) {
+function generateRealNums(count, min = 0, max = 1) {
     const set = [];
     for (let i = 0; i < count; i++)
         set.push(Math.random() * (max - min) + min);
@@ -59,8 +59,8 @@ function publish(sample, epsilon, averageLengths) {
  * the typical input for time complexities in this package.
  *
  * Also measures the distribution of realNums elements. Low (<0.01%) rate
- * of convergence means the sample is skewed towards rationals and quadratic
- * irrationals.
+ * of convergence means the sample is skewed towards small rationals and
+ * quadratic irrationals.
  */
 function getRateOfConvergence(realNums, epsilon, sample = realNums.length) {
     const lengths = [];

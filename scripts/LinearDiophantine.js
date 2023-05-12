@@ -116,7 +116,7 @@ export function solver(vars, solution) {
     }
 }
 
-console.log(solveLinearEquation("32a + 48b + 24c + 6d = 2"));
+//console.log(solveLinearEquation("32a + 48b + 24c + 6d = 2"));
 
 // object["set"][key] = `${keyOrigin} ${variables.d / gcd >= 0 ? "+" : "-"} ${Math.abs(Number(variables.d / gcd))}t`;
 
