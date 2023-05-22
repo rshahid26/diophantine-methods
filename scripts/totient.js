@@ -10,7 +10,8 @@ export function countPrimes(n) {
     for (let i = 2; i <= Math.sqrt(n); i++) {
         if (sieve[i]) {
             // Starts at mult=i as for all j*i where j<i, sieve[j*i] is already false!
-            for (let mult = i; mult * i <= n; mult++) sieve[mult * i] = false;
+            for (let mult = i; mult * i <= n; mult++)
+                sieve[mult * i] = false;
         }
     }
     for (let i = 2; i <= n; i++) if (sieve[i]) primeCount++;
@@ -26,6 +27,3 @@ export const primeCountApproximation = (n) => {return n / Math.log(n)}
 export function logarithmicIntegral(n, intervals) {
     return trapezoidalRiemannSum((x) => {return 1 / Math.log(x)}, 2, n, intervals);
 }
-
-const n = 30000;
-console.log("primes", countPrimes(n), primeCountApproximation(n), logarithmicIntegral(n));
