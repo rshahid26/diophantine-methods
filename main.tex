@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.2in, top=.66in, bottom=.66in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\setlength{\parindent}{0em}
+\setcounter{secnumdepth}{0}
+
+\title{}
+\date{}
+
+\begin{document}
+
+Rational approximations of irrational numbers offer portable alternatives for computation and theoretical exploration. Today, computer algorithms can approximate numbers but return values of varying length and accuracy.\\
+
+This project measures the viability of three central approximation methods: Dirichlet approximations, continued fractions, and Farey Sequences. The aim is to prove each method and determine which provides the best trade-off between minimizing the length of the approximation and achieving optimal space and time complexities. \\
+
+An \textbf{$\epsilon$-rational approximation} of a real number $\alpha$ is the rational number $\frac{p}{q}$ such that, for some $\epsilon > 0$,
+\vspace{-1em}
+\begin{align*}
+    |\phantom{.}\alpha - \cfrac{p}{q}\phantom{.}|  < \epsilon.
+\end{align*}
+A \textbf{rational approximation method} is an algorithm that takes input $\alpha$ and $\epsilon$, and returns an $\epsilon$-rational approximation $\frac{p}{q}$. Algorithm code is on github.com/rshahid26/diophantine.\\
+
+A naive approach to approximating a real number is to truncate its decimal expansion. For example, to approximate $\alpha = \pi$ with $\epsilon = 0.005$, we can multiply $\alpha$ with the reciprocal of epsilon and then truncate it.
+\begin{align*}
+\alpha\left(\cfrac{\frac{1}{\epsilon}}{\frac{1}{\epsilon}}\right) = \pi\left(\cfrac{\frac{1}{0.005}}{\frac{1}{0.005}}\right) = \cfrac{200\pi}{200} = \cfrac{628.31853 \dots}{200} \approx \cfrac{628}{200}
+\end{align*}
+
+Therefore, we can define the following rational approximation method with O(1) space and time complexity.\\\\
+
+Note the approximation of $\pi$ uses six digits. Define the number of digits as the \textbf{length}, or $\textit{len}()$, of our approximation. Then, our goal is to find the rational approximation method that minimizes lengths while making the smallest concessions in space and time complexity.\\
+
+For example, when $\alpha=\pi$ and $\epsilon=0.005$, the following $\epsilon$-rational approximations have smaller length.
+\begin{align*}
+\text{len}\left(\cfrac{22}{7}\right) < \text{len}\left(\cfrac{157}{50}\right) < \text{len}\left(\cfrac{628}{200}\right)
+\end{align*}
+
+\newpage
+\textbf{Dirichlet Approximation Theorem:} For any real number $\alpha$ and any positive integer $N=\frac{1}{\epsilon}$, there exist integers $p$ and $q$ such that $1 \leq q \leq N$ and $\left| \alpha - \cfrac{p}{q} \right| < \cfrac{1}{qN}$.
+\\\\
+\textbf{Proof:}
+
+Consider the $N+1$ multiples of $\alpha$: $0, \{ \alpha \}, \{ 2\alpha \}, \dots, \{ N\alpha \}$.
+By the Pigeonhole Principle there exists two multiples $m\alpha$ and $n\alpha$ that fall into the same partition.\\
+
+
+$|-----|-----|---- \cdots ----|-----|$\\
+$0\phantom{----..}\frac{1}{N}\phantom{----...}\frac{2}{N}\phantom{-----.}\phantom{---.}\frac{N-1}{N}\phantom{----.}1$ \\
+ 
+Let $m\alpha < n\alpha$. Then, $\{ n\alpha \} - \{ m\alpha \} < \frac{1}{N} = \epsilon$.\\
+
+Now let $p = \lfloor n\alpha \rfloor - \lfloor m\alpha \rfloor$ and $q = n - m$. Since $1 \leq q \leq N$, we can use $m\alpha$ and $n\alpha$ to derive our inequality.
+\begin{align*}
+    \left| \alpha - \frac{p}{q} \right| &= \left| \frac{q\alpha - p}{q} \right| \\
+    &= \left| \frac{n\alpha - m\alpha - (\lfloor n\alpha \rfloor - \lfloor m\alpha \rfloor)}{q} \right| \\
+    &= \left| \frac{\{ n\alpha \} - \{ m\alpha \}}{q} \right| < \frac{1}{qN}.
+\end{align*}
+\textbf{Continued Fractions:} Let $\alpha$ equal the floor of $\alpha$ plus the fractional part of $\alpha$, so $\alpha$ = $\lfloor\alpha\rfloor$ + $\{\alpha\}$. Then, by repeatedly writing $\{\alpha\}$ as $\frac{1}{\frac{1}{\{\alpha\}}}$ and using our equality, we can write any real number as the continued fraction:
+\[
+\alpha=\lfloor\alpha\rfloor+
+\cfrac{1}{\lfloor\frac{1}{\{\alpha\}}\rfloor
++\cfrac{1}{\lfloor\frac{1}{\{\frac{1}{\{\alpha\}}\}}\rfloor
++\cfrac{1}{\lfloor\frac{1}{\{\frac{1}{\{\frac{1}{\{\alpha\}}\}}\}}\rfloor
++\cdots}}}
+\]
+
+\newpage
+\textbf{Farey Fractions:} A Farey sequence $F_n$ is the set of reduced fractions $p/q$ such that $0\leq p \leq q \leq n$. Then, for consecutive fractions $\frac{a}{b}$ and $\frac{c}{d}$ in $F_n$, their \textbf{mediant} $\frac{a+c}{b+d}$ is between them in $F_n$ if $b+d \leq n$.\\
+
+\textbf{Proof:} We know that $\frac{a}{b} < \frac{c}{d}$, so $\frac{a}{b} - \frac{c}{d} = \frac{ad-bc}{bd} < 0$ and $ad < bc$. To show $\frac{a}{b} < \frac{a+c}{b+d} < \frac{c}{d}$, repeat the process.
+\begin{align*}
+\frac{a}{b} < \frac{a+c}{b+d} &\iff ab+\underline{ad} < ab+\underline{bc} \\
+&\iff ad < bc.
+\end{align*}
+
+Similarly, we can show $\frac{a+c}{b+d} < \frac{c}{d}$. This property now lets us binary search a Farey fraction in $F_n$ within $\epsilon$ distance of $\alpha$.\\
+
+Farey sequences of size 1 though 9, color coded. Each subsequent edge is found using the mediant property.\\
+
+By Dirichlet's Approximation Theorem, an $\epsilon$-rational approximation necessarily exists within N=$\frac{1}{\epsilon}$. Below are the time and space complexities of the three algorithms in terms of N.\\
+
+Note the complexity of the continued fraction approximation method depends on how fast the fraction converges to $\alpha$. This is measured by $k$, the number of $\frac{1}{\frac{1}{\{\alpha\}}}$ divisions necessary to get within $\epsilon$. This algorithm has time complexity of $O(k^2)$. \\
+
+In a worst-case scenario, k is proportional to N. However, continued fractions converge very quickly to $\alpha$ so on average $O(k^2)$ is between $O(\log N)$ and $O(N)$.\\
+
+To determine which algorithm minimizes length, I randomly generated 100,000 real numbers $\alpha$ and approximated them to the nearest hundred thousandth, being $\epsilon$. My simulation shows Farey Sequence approximations minimize length in the best time and space complexities.\\
+
+Continued fractions are a close second. In my simulation k $\approx$ 0.0005N giving it an average time complexity of $O(\log N)$.\\
+
+\begin{thebibliography}{9}
+\bibitem{rosen2005elementary}
+Kenneth H. Rosen,
+\textit{Elementary Number Theory},
+Pearson/Addison Wesley, 2005.
+\end{thebibliography}
+Special thanks to my mentor, Ajmain Yamin.
+\end{document}
+
+\subsection{}
+
+
+\end{document}
