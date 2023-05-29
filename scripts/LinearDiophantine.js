@@ -1,59 +1,109 @@
-import { mod, euclideanAlgorithm } from "./factor.js";
+import { bezoutCoefficients, getBezoutHistory } from "./bezout.js";
+import { euclideanAlgorithm } from "./factor.js";
 
 /**
- * Modified euclidean algorithm that pushes a history of operations
- * to the remainder variable.
+ * Wrap Linear Equation class with factory function
  */
-function getEuclideanHistory(a, b, remainders = []) {
-    if (b === 0) return remainders;
+export function returnLinearEquation(equation) {
+    return new LinearEquation(equation);
+}
+
+export class LinearEquation {
+
+    constructor(equation) {
+        if (equation.match(/[!@#$%^&*(),?":{}|<>/_]/))
+            throw new Error("An equation consists of numbers, letters, and [+,-,=,.] only.");
+
+        const { variables, solution } = parseLinearEquation(equation);
+        const coefficients = Object.values(variables);
+
+        Object.keys(variables).forEach((v, index) => {
+            this[v] = solveLinearEquation(coefficients, solution)[index]}
+        );
+        this.variables = variables;
+        this.coefficients = coefficients;
+        this.parameters = Array(coefficients.length - 1)
+            .fill(1).map((e, index) => "t" + (e + index));
+        this.solution = solution;
+    }
+
+    toEquationString() {
+
+    }
+
+    setParameters(parameterArray) {
+        if (parameterArray.length !== this.parameters.length)
+            throw new Error("This equation needs " + this.parameters.length + " parameters.");
+
+        else this.parameters = parameterArray;
+    }
+
+    leastSquareSolutions() {}
+    leastPositiveSolutions() {}
+    solveFor() {} //param 1, param 2...
+
+}
+
+const equation = new LinearEquation("1x - 14y + 5z = 18");
+console.log(equation);
+
+//console.log(testLinearEquation(parameterization, coefficients, [1, 2, 4]))
+
+function solveLinearEquation(coefficients, solution) {
+    if (coefficients.length === 2)
+        return solveLinearBinomialEquation(coefficients, solution);
+
     else {
-        remainders.push([mod(a, b), a, b, -Math.floor(a / b)]);
-        return getEuclideanHistory(b, mod(a, b), remainders);
+        const gcd = euclideanAlgorithm(...coefficients.slice(0, 2));
+        const [xBezout, yBezout] = bezoutCoefficients(...coefficients.slice(0, 2));
+        let temp = solveLinearEquation([gcd, ...coefficients.slice(2)], solution);
+
+        return [
+            temp[0].map(c => c * xBezout).concat([coefficients[1]]),
+            temp[0].map(c => c * yBezout).concat(-[coefficients[0]]),
+            ...temp.slice(1)
+        ]
     }
 }
 
 /**
- * Calculates the Bezout coefficients of two integers by
- * reversing the Euclidean Algorithm.
+ * Solves a Diophantine linear equation in the form ax + by = c,
+ * where a, b, and c are integers.
  *
- * Returns an object containing the GCD and coefficients.
+ * Returns the origin solution, being the Bezout Coefficients
+ * scaled by (c / GCD), as well as the set of all solutions,
+ * being a parameterized linear equation of degree 1.
  */
-function binaryBezoutCoefficients(a, b) {
-    if (b === 0) return { gcd: a, x: 1, y: 0 };
-    else {
-        const { gcd, x, y } = binaryBezoutCoefficients(b, mod(a, b));
-        // noinspection JSSuspiciousNameCombination
-        return {gcd: gcd, x: y, y: x - y * Math.floor(a / b)};
-    }
+function solveLinearBinomialEquation(coefficients, solution) {
+    const [xCoeff, yCoeff] = coefficients;
+    const [xBezout, yBezout] = bezoutCoefficients(xCoeff, yCoeff);
+    const gcd = euclideanAlgorithm(...coefficients);
+
+    return [
+        [(solution / gcd) * xBezout, yCoeff / gcd],
+        [(solution / gcd) * yBezout, -xCoeff / gcd]
+    ];
 }
 
-function getBezoutHistory(...values) {
-    let history = [];
-    let result = values[0];
+function testLinearEquation(parameterization, coefficients, values) {
 
-    for (let i = 1; i < values.length; i++) {
-        history.push(binaryBezoutCoefficients(result, values[i]));
-        result = history[history.length - 1].gcd;
-    }
-    return history;
-}
+    let sum = 0;
+    for (let i = 0; i < parameterization.length; i++) {
 
-export function bezoutCoefficients(...values) {
-    let result = values[0];
-    let coefficients = [];
-
-    for (let i = 1; i < values.length; i++) {
-        const { gcd, x, y } = binaryBezoutCoefficients(result, values[i]);
-        result = gcd;
-
-        if (coefficients.length < 1) coefficients.push(x, y);
-        else {
-            coefficients.forEach((n, index) => coefficients[index] = n * x)
-            coefficients.push(y);
+        let variable = 0;
+        for (let j = 0; j < parameterization[i].length; j++) {
+            variable += parameterization[i][j] * values[j];
+            console.log(parameterization[i], parameterization[i][j] + " * " + values[j]);
         }
+        sum += variable * coefficients[i]
     }
-    return coefficients;
+    return sum;
 }
+
+
+function parameterizeLinearEquation() {
+}
+
 
 /**
  * Takes a linear diophantine equation in the form of a string and
@@ -74,49 +124,6 @@ function parseLinearEquation(equation) {
     return { variables, solution };
 }
 
-/**
- * Solves a Diophantine linear equation of the form ax + by = c,
- * where a, b, and c are integers.
- *
- * Returns the origin solution, being the Bezout Coefficients
- * scaled by (c / GCD), as well as the set of all solutions,
- * being a parameterized linear equation.
- */
-export function solveLinearEquation(equation) {
-    const { variables, solution } = parseLinearEquation(equation);
-    const bezoutArray = bezoutCoefficients(...Object.values(variables));
-    const gcd = euclideanAlgorithm(...Object.values(variables));
-
-    solver(Object.values(variables), solution);
-
-    // if (solution % gcd !== 0) return {};
-    // let object = {set: {}};
-    // let index = 0;
-    // for (const key in variables) {
-    //     const keyOrigin = Number(bezoutArray[index] * (solution / gcd));
-    //     object[key] = keyOrigin;
-    //
-    //     index++;
-    // }
-    // return object;
-}
-
-export function solver(vars, solution) {
-    if (vars.length === 2) {
-        const bezoutArray = bezoutCoefficients(vars);
-        const gcd = euclideanAlgorithm(vars);
-
-        return [
-            [Number(bezoutArray[0] * (solution / gcd)),Math.abs(Number(vars[1] / gcd))],
-            [Number(bezoutArray[1] * (solution / gcd)),Math.abs(Number(vars[0] / gcd))]];
-    }
-    else {
-        solver([euclideanAlgorithm(vars[0], vars[1]), ...vars.splice(2)], solution);
-        return "test";
-    }
-}
-
-//console.log(solveLinearEquation("32a + 48b + 24c + 6d = 2"));
 
 // object["set"][key] = `${keyOrigin} ${variables.d / gcd >= 0 ? "+" : "-"} ${Math.abs(Number(variables.d / gcd))}t`;
 

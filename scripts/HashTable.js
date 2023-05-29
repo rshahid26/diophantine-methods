@@ -1,3 +1,11 @@
+/**
+ * @class HashTable
+ * Uses a hash function to map values of any data type to some
+ * Natural number, or key, in [0, table.length - 1].
+ *
+ * If the function is one-to-one, values can be retrieved
+ * using notation: hashTable[key] = value.
+ */
 class HashTable {
 
     constructor() {

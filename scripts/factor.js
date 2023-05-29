@@ -16,7 +16,7 @@ export function euclideanAlgorithm(...values) {
     for (let i = 1; i < values.length; i++)
         result = binaryEuclidean(result, values[i]);
 
-    return result;
+    return Math.abs(result);
 }
 
 export function leastCommonMultiple(...values) {
@@ -64,7 +64,7 @@ export function primeFactorizationR(a, primeFactors = []) {
  * Guaranteed to terminate as, for all n, n = 1 * n which equals
  * ((n-1)/2) * ((n+1)/2), a non-trivial factorization.
  */
-function fermatFactorization(n) {
+export function fermatFactorization(n) {
     if (n % 2 === 0) return "Odd composite integers only."
 
     let x = Math.ceil(Math.sqrt(n))

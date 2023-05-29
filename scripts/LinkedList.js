@@ -1,3 +1,8 @@
+/**
+ * @class Node
+ * Represents a Node in a doubly linked list. Contains any
+ * data type and reference to previous and next Nodes.
+ */
 export class Node {
     constructor(data, prev = null, next = null) {
         this.data = data;
@@ -6,7 +11,18 @@ export class Node {
     }
 }
 
+/**
+ * @class LinkedList
+ * Implements a doubly Linked List class containing a
+ * list of Nodes connected by pointers.
+ **/
 export class LinkedList {
+
+    /**
+     * @method constructor
+     * @param {...any} data - initial data to create
+     * nodes from.
+     */
     constructor(...data) {
         if (data.length === 0) this.head = null;
         else {
@@ -39,7 +55,6 @@ export class LinkedList {
     }
 
     remove(data) {
-
         let current = this.head;
         while (current.next !== null) {
 
