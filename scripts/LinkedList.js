@@ -13,8 +13,8 @@ export class Node {
 
 /**
  * @class LinkedList
- * Implements a doubly Linked List class containing a
- * list of Nodes connected by pointers.
+ * Implements a doubly Linked List containing a list of
+ * Nodes connected by pointers.
  **/
 export class LinkedList {
 

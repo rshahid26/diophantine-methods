@@ -1,62 +1,59 @@
-import { bezoutCoefficients, getBezoutHistory } from "./bezout.js";
+import { bezoutCoefficients } from "./bezout.js";
 import { euclideanAlgorithm } from "./factor.js";
 import { ParametricEquation } from "./Parametric.js";
 
 /**
- * Wrap Linear Equation class with factory function
+ * Represents a Linear Diophantine Equation. Every variable in the
+ * equation has a key-value pair between its character and an
+ * object of the ParametricEquation class.
  */
-export function returnLinearEquation(equation) {
-    return new LinearEquation(equation);
-}
-
 export class LinearEquation {
 
+    /**
+     * Constructs a linear equation object.
+     * @param {string} equation
+     */
     constructor(equation) {
         const { coefficients, variables, solution } = parseLinearEquation(equation);
+
         this.coefficients = coefficients;
         this.variables = variables;
         this.solution = solution;
 
+        // Initialize parameters as t_1, t_2, ... t_n-1
         this.parameters = Array(coefficients.length - 1)
             .fill(1).map((e, index) => "t" + (String.fromCodePoint(0x2080 + e + index)));
-
-        variables.forEach((v, index) => {
-            this[v] = new ParametricEquation(
-                solveLinearEquation(coefficients, solution)[index], this)
-        });
+        this.updateParametricEquations();
     }
 
-    toString() {
-        let string = "";
-
-        for (let i = 0; i < this.coefficients.length; i++) {
-            string +=
-                this.coefficients[i].toString() +
-                this.variables[i].toString();
-
-            string +=
-                this.coefficients[i + 1] !== undefined ? " + " : " = " + this.solution;
-        }
-        return string;
-    }
-
+    /**
+     * Set new coefficients and update ParametricEquation objects.
+     * @param {Array.<number>} array
+     */
     setCoefficients(array) {
         if (array.length !== this.coefficients.length)
             throw new Error("This equation needs " + this.coefficients.length + " coefficients.");
 
         else this.coefficients = array;
-        this.variables.forEach((v, index) => {
-            this[v] = solveLinearEquation(this.coefficients, this.solution)[index]}
-        );
+        this.updateParametricEquations();
     }
 
+    /**
+     * Set new parameters and update ParametricEquation objects.
+     * @param {Array.<string>} charArray
+     */
     setParameters(charArray) {
         if (charArray.length !== this.parameters.length)
             throw new Error("This equation needs " + this.parameters.length + " parameters.");
 
         else this.parameters = charArray;
+        this.updateParametricEquations();
     }
 
+    /**
+     * Copy old variable key-values to new keys.
+     * @param {Array.<string>} charArray
+     */
     setVariables(charArray) {
         if (charArray.length !== this.variables.length)
             throw new Error("This equation needs " + this.variables.length + " variables.");
@@ -69,6 +66,22 @@ export class LinearEquation {
         }
     }
 
+    /**
+     * Re-assign variable keys to a new set of Parametric
+     * Equation objects.
+     */
+    updateParametricEquations() {
+        const parametricEquations = solveLinearEquation(this.coefficients, this.solution);
+        this.variables.forEach((v, index) => {
+            this[v] = new ParametricEquation(parametricEquations[index], this)
+        });
+    }
+
+    /**
+     * Evaluate the LinearEquation at a certain point in the
+     * parametric space. Always equals this.solution.
+     * @param {...number} values
+     */
     solveFor(...values) {
         if (values.length !== this.parameters.length)
             throw new Error("This equation needs a list of " + this.parameters.length +
@@ -81,6 +94,12 @@ export class LinearEquation {
         return sum;
     }
 
+    /**
+     * Evaluate the LinearEquation at a certain point in the
+     * domain space. Will not equal this.solution unless the point
+     * is a solution for some integer values of the parameters.
+     * @param {...number} values
+     */
     evaluateAtPoint(...values) {
         if (values.length !== this.variables.length)
             throw new Error("This equation needs a list of " + this.variables.length +
@@ -91,59 +110,29 @@ export class LinearEquation {
             sum += this.coefficients[i] * values[i];
         return sum;
     }
-}
 
-function solveLinearEquation(coefficients, solution) {
-    if (solution % euclideanAlgorithm(...coefficients) !== 0)
-        throw new Error("This equation has no integral solutions");
+    /**
+     * Returns a string representation of the LinearEquation object.
+     */
+    toString() {
+        let string = "";
 
-    if (coefficients.length === 2)
-        return solveLinearBinomialEquation(coefficients, solution);
-    else {
-        const gcd = euclideanAlgorithm(...coefficients.slice(0, 2));
-        const [xBezout, yBezout] = bezoutCoefficients(...coefficients.slice(0, 2));
-        let collapsedEquation = solveLinearEquation([gcd, ...coefficients.slice(2)], solution);
-
-        return [
-            collapsedEquation[0].map(c => c * xBezout).concat([coefficients[1]]),
-            collapsedEquation[0].map(c => c * yBezout).concat(-[coefficients[0]]),
-            ...collapsedEquation.slice(1)
-        ]
+        for (let i = 0; i < this.coefficients.length; i++) {
+            string +=
+                this.coefficients[i].toString() +
+                this.variables[i].toString();
+            string +=
+                this.coefficients[i + 1] !== undefined ? " + " : " = " + this.solution;
+        }
+        return string;
     }
 }
 
-const equation = new LinearEquation("2x - 14y + 5z + 6f = 16");
-const parameters = [1, 5, 7];
-
-console.log(equation);
-console.log(equation.toString());
-
-console.log(equation.x.toString(), equation.x.solveFor(...parameters));
-console.log(equation.y.toString(), equation.y.solveFor(...parameters));
-console.log(equation.z.toString(), equation.z.solveFor(...parameters));
-console.log(equation.solveFor(...parameters));
-
-
 /**
- * Solves a Diophantine linear equation in the form ax + by = c,
- * where a, b, and c are integers.
- *
- * Returns the original solution, being the Bezout Coefficients
- * scaled by (c / GCD), as the origin in the set of all solutions,
- * being a parametric linear equation of degree 1.
+ * Wrap Linear Equation class with factory function
  */
-function solveLinearBinomialEquation(coefficients, solution) {
-    const [xCoeff, yCoeff] = coefficients;
-    const [xBezout, yBezout] = bezoutCoefficients(xCoeff, yCoeff);
-    const gcd = euclideanAlgorithm(...coefficients);
-
-    return [
-        [(solution / gcd) * xBezout, yCoeff / gcd],
-        [(solution / gcd) * yBezout, -xCoeff / gcd]
-    ];
-}
-
-function parameterizeLinearEquation() {
+export function returnLinearEquation(equation) {
+    return new LinearEquation(equation);
 }
 
 /**
@@ -175,4 +164,52 @@ function parseLinearEquation(equation) {
     if (coefficients.length !== variables.length)
         throw new Error("There must be an equal number of coefficients and variables.");
     else return { coefficients, variables, solution };
+}
+
+/**
+ * Solves a linear diophantine equation of n variables recursively
+ * by repeatedly projecting it onto a subspace with 1 less
+ * dimension.
+ *
+ * @param {Array.<number>} coefficients
+ * @param {number} solution
+ */
+function solveLinearEquation(coefficients, solution) {
+    if (solution % euclideanAlgorithm(...coefficients) !== 0)
+        throw new Error("This equation has no integer solutions");
+
+    if (coefficients.length === 2)
+        return solveLinearBinomialEquation(coefficients, solution);
+    else {
+        const gcd = euclideanAlgorithm(...coefficients.slice(0, 2));
+        const [xBezout, yBezout] = bezoutCoefficients(...coefficients.slice(0, 2));
+        let collapsedEquation = solveLinearEquation([gcd, ...coefficients.slice(2)], solution);
+
+        return [
+            collapsedEquation[0].map(c => c * xBezout).concat([coefficients[1]]),
+            collapsedEquation[0].map(c => c * yBezout).concat(-[coefficients[0]]),
+            ...collapsedEquation.slice(1)
+        ]
+    }
+}
+
+/**
+ * Solves a Diophantine linear equation in the form of ax + by = c,
+ * where a, b, and c are integers.
+ *
+ * Returns the set of all integer solutions for x and y where
+ * x and y equal parametric equations in terms of some t.
+ *
+ * @param {Array.<number>} coefficients
+ * @param {number} solution
+ */
+function solveLinearBinomialEquation(coefficients, solution) {
+    const [xCoeff, yCoeff] = coefficients;
+    const [xBezout, yBezout] = bezoutCoefficients(xCoeff, yCoeff);
+    const gcd = euclideanAlgorithm(...coefficients);
+
+    return [
+        [(solution / gcd) * xBezout, yCoeff / gcd],
+        [(solution / gcd) * yBezout, -xCoeff / gcd]
+    ];
 }
