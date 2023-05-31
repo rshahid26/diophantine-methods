@@ -3,55 +3,33 @@ import { euclideanAlgorithm } from "./factor.js";
 import { ParametricEquation } from "./Parametric.js";
 
 /**
- * Represents a Linear Diophantine Equation. Every variable in the
+ * Represents a linear Diophantine Equation. Every variable in the
  * equation has a key-value pair between its character and an
  * object of the ParametricEquation class.
  */
-export class LinearEquation {
+export class DiophantineEquation {
 
     /**
-     * Constructs a linear equation object.
+     * Constructs a Diophantine Equation object.
      * @param {string} equation
      */
     constructor(equation) {
-        const { coefficients, variables, solution } = parseLinearEquation(equation);
+        const { coefficients, variables, solution } = parseDiophantineEquation(equation);
 
         this.coefficients = coefficients;
         this.variables = variables;
         this.solution = solution;
 
         // Initialize parameters as t_1, t_2, ... t_n-1
-        this.parameters = Array(coefficients.length - 1)
+        this.parameters = Array(this.coefficients.length - 1)
             .fill(1).map((e, index) => "t" + (String.fromCodePoint(0x2080 + e + index)));
-        this.updateParametricEquations();
+        this._updateParametrics();
     }
 
-    /**
-     * Set new coefficients and update ParametricEquation objects.
-     * @param {Array.<number>} array
-     */
-    setCoefficients(array) {
-        if (array.length !== this.coefficients.length)
-            throw new Error("This equation needs " + this.coefficients.length + " coefficients.");
-
-        else this.coefficients = array;
-        this.updateParametricEquations();
-    }
 
     /**
-     * Set new parameters and update ParametricEquation objects.
-     * @param {Array.<string>} charArray
-     */
-    setParameters(charArray) {
-        if (charArray.length !== this.parameters.length)
-            throw new Error("This equation needs " + this.parameters.length + " parameters.");
-
-        else this.parameters = charArray;
-        this.updateParametricEquations();
-    }
-
-    /**
-     * Copy old variable key-values to new keys.
+     * Copy old Parametric Equations to a new set of user-defined
+     * variables. Must be one character each.
      * @param {Array.<string>} charArray
      */
     setVariables(charArray) {
@@ -67,40 +45,78 @@ export class LinearEquation {
     }
 
     /**
-     * Re-assign variable keys to a new set of Parametric
-     * Equation objects.
+     * Set new coefficients and update ParametricEquation objects.
+     * @param {Array.<number>} array
      */
-    updateParametricEquations() {
-        const parametricEquations = solveLinearEquation(this.coefficients, this.solution);
+    setCoefficients(array) {
+        if (array.length !== this.coefficients.length)
+            throw new Error("This equation needs " + this.coefficients.length + " coefficients.");
+
+        else this.coefficients = array;
+        this._updateParametrics();
+    }
+
+    /**
+     * Set new parameters and update ParametricEquation objects.
+     * @param {Array.<string>} charArray
+     */
+    setParameters(charArray) {
+        if (charArray.length !== this.parameters.length)
+            throw new Error("This equation needs " + this.parameters.length + " parameters.");
+
+        else this.parameters = charArray;
+        this._updateParametrics();
+    }
+
+    /**
+     * Set new solution and update ParametricEquation objects.
+     * @param {number} solution
+     */
+    setSolution(solution) {
+        if (typeof(solution) !== "number" || solution % 1 !== 0)
+            throw new Error("The solution must be an integer.")
+
+        else this.solution = solution;
+        this._updateParametrics();
+    }
+
+
+    /**
+     * Re-assign variable keys to a new set of Parametric Equation
+     * objects.
+     */
+    _updateParametrics() {
+        const parametricEquations = solveDiophantineEquation(this.coefficients, this.solution);
         this.variables.forEach((v, index) => {
-            this[v] = new ParametricEquation(parametricEquations[index], this)
+            this[v] = new ParametricEquation(parametricEquations[index], this);
+            replaceNegativeZeroes(this[v].coefficients);
         });
     }
 
     /**
-     * Evaluate the LinearEquation at a certain point in the
+     * Evaluates the Diophantine Equation at a certain point in the
      * parametric space. Always equals this.solution.
      * @param {...number} values
      */
-    solveFor(...values) {
+    evaluateAt(...values) {
         if (values.length !== this.parameters.length)
             throw new Error("This equation needs a list of " + this.parameters.length +
                 " values for " + this.parameters.length + " parameters.");
 
         let sum = 0;
         this.variables.forEach((v, index) => {
-            sum += this[v].solveFor(...values) * this.coefficients[index];
+            sum += this[v].evaluateAt(...values) * this.coefficients[index];
         });
         return sum;
     }
 
     /**
-     * Evaluate the LinearEquation at a certain point in the
+     * Evaluates the Diophantine Equation at a certain point in the
      * domain space. Will not equal this.solution unless the point
-     * is a solution for some integer values of the parameters.
+     * is a solution for the parametric space.
      * @param {...number} values
      */
-    evaluateAtPoint(...values) {
+    evaluateAtDomain(...values) {
         if (values.length !== this.variables.length)
             throw new Error("This equation needs a list of " + this.variables.length +
                 " values for " + this.variables.length + " variables.");
@@ -112,7 +128,7 @@ export class LinearEquation {
     }
 
     /**
-     * Returns a string representation of the LinearEquation object.
+     * Returns a string representation of the DiophantineEquation object.
      */
     toString() {
         let string = "";
@@ -129,10 +145,10 @@ export class LinearEquation {
 }
 
 /**
- * Wrap Linear Equation class with factory function
+ * Wrap Diophantine Equation class with factory function
  */
-export function returnLinearEquation(equation) {
-    return new LinearEquation(equation);
+export function returnDiophantineEquation(equation) {
+    return new DiophantineEquation(equation);
 }
 
 /**
@@ -142,7 +158,7 @@ export function returnLinearEquation(equation) {
  * Checks for type mismatch, bad characters, repeated variables,
  * and more. Add more checks to this!
  */
-function parseLinearEquation(equation) {
+function parseDiophantineEquation(equation) {
     if (equation.match(/[!@#$%^&*(),?":{}|<>/_]/))
         throw new Error("An equation consists of numbers, letters, and [+,-,=,.] only.");
 
@@ -174,7 +190,7 @@ function parseLinearEquation(equation) {
  * @param {Array.<number>} coefficients
  * @param {number} solution
  */
-function solveLinearEquation(coefficients, solution) {
+function solveDiophantineEquation(coefficients, solution) {
     if (solution % euclideanAlgorithm(...coefficients) !== 0)
         throw new Error("This equation has no integer solutions");
 
@@ -183,7 +199,7 @@ function solveLinearEquation(coefficients, solution) {
     else {
         const gcd = euclideanAlgorithm(...coefficients.slice(0, 2));
         const [xBezout, yBezout] = bezoutCoefficients(...coefficients.slice(0, 2));
-        let collapsedEquation = solveLinearEquation([gcd, ...coefficients.slice(2)], solution);
+        let collapsedEquation = solveDiophantineEquation([gcd, ...coefficients.slice(2)], solution);
 
         return [
             collapsedEquation[0].map(c => c * xBezout).concat([coefficients[1]]),
@@ -194,7 +210,7 @@ function solveLinearEquation(coefficients, solution) {
 }
 
 /**
- * Solves a Diophantine linear equation in the form of ax + by = c,
+ * Solves a linear Diophantine Equation in the form of ax + by = c,
  * where a, b, and c are integers.
  *
  * Returns the set of all integer solutions for x and y where
@@ -213,3 +229,18 @@ function solveLinearBinomialEquation(coefficients, solution) {
         [(solution / gcd) * yBezout, -xCoeff / gcd]
     ];
 }
+
+/**
+ * Replace all instances of -0 with 0. Caused by alternating
+ * signs when calculating Parametric Equation coefficients. 
+ * @param {Array.<number>} values
+ */
+function replaceNegativeZeroes(values) {
+    for (let i = 0; i < values.length; i++) {
+        if (values[i] === -0) values[i] = 0;
+    }
+}
+
+const equation = new DiophantineEquation("4x - 9y - 1z + 66t + 4l = -3");
+console.log(equation);
+console.log(equation.y.toString());

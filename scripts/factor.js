@@ -6,6 +6,11 @@ export function mod(a, b) {
     return ((a % b) + b) % b;
 }
 
+/**
+ * Returns the greatest common divisor (gcd) from a list of
+ * integers.
+ * @param {...number} values
+ */
 export function euclideanAlgorithm(...values) {
     function binaryEuclidean(a, b) {
         if (b === 0) return a;
@@ -19,6 +24,11 @@ export function euclideanAlgorithm(...values) {
     return Math.abs(result);
 }
 
+/**
+ * Returns the least common multiple (lcm) from a list of
+ * integers.
+ * @param {...number} values
+ */
 export function leastCommonMultiple(...values) {
     let result = values[0];
     for (let i = 1; i < values.length; i++)
@@ -27,7 +37,12 @@ export function leastCommonMultiple(...values) {
     return result;
 }
 
-export function primeFactorizationBF(a) {
+/** Returns an array of prime factors for an integer n
+ *with time complexity of O(sqrt(n)).
+ * @param {number} a
+ * @returns {Array<number>}
+ */
+export function primeFactorization(a) {
     let primeFactors = [];
 
     let i = 1;
@@ -42,12 +57,13 @@ export function primeFactorizationBF(a) {
     return primeFactors;
 }
 
-function factorial(n) {
-    if (n === 0) return 1;
-    else return n * factorial(n - 1);
-}
-
-export function primeFactorizationR(a, primeFactors = []) {
+/** Recursive approach to prime factorization. Still
+ * with time complexity of O(sqrt(n)).
+ * @param {number} a
+ * @param {Array<number>} primeFactors optional
+ * @returns {Array<number>}
+ */
+function primeFactorizationR(a, primeFactors = []) {
     if (a === 1) return primeFactors;
     else {
         let i = primeFactors.length === 0 ? 2 : primeFactors[primeFactors.length - 1];
@@ -57,6 +73,12 @@ export function primeFactorizationR(a, primeFactors = []) {
         return primeFactorizationR(a / i, primeFactors);
     }
 }
+
+function factorial(n) {
+    if (n === 0) return 1;
+    else return n * factorial(n - 1);
+}
+
 /**
  * An implementation of Fermat Factorization using the one-to-one
  * correspondence of odd integers and differences of squares.

@@ -1,17 +1,20 @@
 /**
- * Represents a Parametric Equation that generates the solution
- * set for a given coordinate of a Linear Diophantine equation.
+ * Represents a linear Parametric Equation that generates the solution
+ * set for some coordinate in a linear Diophantine equation.
  */
 export class ParametricEquation {
 
     /**
-     * Constructs a linear equation object.
+     * Constructs a Parametric Equation object.
      * @param {Array.<number>} coefficients
-     * @param {LinearEquation} linearEquation
+     * @param {DiophantineEquation} DiophantineEquation
      */
-    constructor(coefficients, linearEquation) {
+    constructor(coefficients, DiophantineEquation) {
+        while (coefficients.length !== DiophantineEquation.coefficients.length)
+            coefficients.push(0);
+
         this.coefficients = coefficients;
-        this._parameters = linearEquation.parameters;
+        this._parameters = DiophantineEquation.parameters;
     }
 
     /**
@@ -27,15 +30,16 @@ export class ParametricEquation {
             string += this._parameters[i - 1] !== undefined ? this._parameters[i - 1].toString() : "";
             string += this.coefficients[i + 1] !== undefined ? " + " : "";
         }
-        return string;
+        if (string.charAt(string.length - 2) !== "+") return string;
+        else return string.substring(0, string.length - 3);
     }
 
     /**
-     * Evaluates the ParametricEquation at a certain point in the
+     * Evaluates the Parametric Equation at a certain point in the
      * domain space.
      * @param {...number} values
      */
-    solveFor(...values) {
+    evaluateAt(...values) {
         let sum = this.coefficients[0];
         for (let i = 1; i < this.coefficients.length; i++)
             sum += this.coefficients[i] * values[i - 1];

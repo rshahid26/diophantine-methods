@@ -1,13 +1,13 @@
 import { continuedApproximation } from "./scripts/dirichlet.js";
 import { dirichletApproximation } from "./scripts/dirichlet.js";
 import { fareyApproximation } from "./scripts/farey.js";
-import { solveLinearEquation } from "./scripts/LinearDiophantine.js";
+import { solveDiophantineEquation } from "./scripts/LinearDiophantine.js";
 
 document.getElementsByTagName("form")[0].addEventListener("submit", (e) => {
     e.preventDefault();
 
     const equation = document.getElementById("equation").value;
-    const solutions = solveLinearEquation(equation);
+    const solutions = solveDiophantineEquation(equation);
 
     console.log(solutions);
 

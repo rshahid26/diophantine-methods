@@ -1,5 +1,5 @@
 import { bezoutCoefficients } from '../scripts/LinearDiophantine.js';
-import { solveLinearEquation } from '../scripts/LinearDiophantine.js';
+import { solveDiophantineEquation } from '../scripts/LinearDiophantine.js';
 
 test('bezoutCoefficients returns the correct result', () => {
     const result = bezoutCoefficients(10, 6);
@@ -13,9 +13,9 @@ describe('bezoutCoefficients', () => {
     });
 });
 
-describe('solveLinearEquation', () => {
+describe('solveDiophantineEquation', () => {
     test('it should solve a Diophantine linear equation', () => {
-        const result = solveLinearEquation("4x + 10y = 22");
+        const result = solveDiophantineEquation("4x + 10y = 22");
         expect(result).toEqual({
             x: -9,
             y: 4,
@@ -27,6 +27,6 @@ describe('solveLinearEquation', () => {
     });
 
     test('it should throw an error if equation is invalid', () => {
-        expect(() => solveLinearEquation("invalid equation")).toThrow();
+        expect(() => solveDiophantineEquation("invalid equation")).toThrow();
     });
 });
