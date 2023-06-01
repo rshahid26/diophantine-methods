@@ -11,7 +11,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [],
-  "author": "RS",
+  "author": "rs26",
   "license": "MIT",
   "repository": {
     "type": "git",

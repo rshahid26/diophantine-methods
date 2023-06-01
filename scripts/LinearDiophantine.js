@@ -16,12 +16,12 @@ export class DiophantineEquation {
     constructor(equation) {
         const { coefficients, variables, solution } = parseDiophantineEquation(equation);
 
-        this.coefficients = coefficients;
-        this.variables = variables;
-        this.solution = solution;
+        this._coefficients = coefficients;
+        this._variables = variables;
+        this._solution = solution;
 
         // Initialize parameters as t_1, t_2, ... t_n-1
-        this.parameters = Array(this.coefficients.length - 1)
+        this._parameters = Array(this._coefficients.length - 1)
             .fill(1).map((e, index) => "t" + (String.fromCodePoint(0x2080 + e + index)));
         this._updateParametrics();
     }
@@ -33,14 +33,14 @@ export class DiophantineEquation {
      * @param {Array.<string>} charArray
      */
     setVariables(charArray) {
-        if (charArray.length !== this.variables.length)
-            throw new Error("This equation needs " + this.variables.length + " variables.");
+        if (charArray.length !== this._variables.length)
+            throw new Error("This equation needs " + this._variables.length + " variables.");
 
         else {
-            this.variables.forEach((v, index) => {
+            this._variables.forEach((v, index) => {
                 delete Object.assign(this, {[charArray[index]]: this[v]})[v];
             });
-            this.variables = charArray;
+            this._variables = charArray;
         }
     }
 
@@ -49,10 +49,10 @@ export class DiophantineEquation {
      * @param {Array.<number>} array
      */
     setCoefficients(array) {
-        if (array.length !== this.coefficients.length)
-            throw new Error("This equation needs " + this.coefficients.length + " coefficients.");
+        if (array.length !== this._coefficients.length)
+            throw new Error("This equation needs " + this._coefficients.length + " coefficients.");
 
-        else this.coefficients = array;
+        else this._coefficients = array;
         this._updateParametrics();
     }
 
@@ -61,10 +61,10 @@ export class DiophantineEquation {
      * @param {Array.<string>} charArray
      */
     setParameters(charArray) {
-        if (charArray.length !== this.parameters.length)
-            throw new Error("This equation needs " + this.parameters.length + " parameters.");
+        if (charArray.length !== this._parameters.length)
+            throw new Error("This equation needs " + this._parameters.length + " parameters.");
 
-        else this.parameters = charArray;
+        else this._parameters = charArray;
         this._updateParametrics();
     }
 
@@ -76,7 +76,7 @@ export class DiophantineEquation {
         if (typeof(solution) !== "number" || solution % 1 !== 0)
             throw new Error("The solution must be an integer.")
 
-        else this.solution = solution;
+        else this._solution = solution;
         this._updateParametrics();
     }
 
@@ -86,59 +86,80 @@ export class DiophantineEquation {
      * objects.
      */
     _updateParametrics() {
-        const parametricEquations = solveDiophantineEquation(this.coefficients, this.solution);
-        this.variables.forEach((v, index) => {
+        const parametricEquations = solveDiophantineEquation(this._coefficients, this._solution);
+        this._variables.forEach((v, index) => {
             this[v] = new ParametricEquation(parametricEquations[index], this);
-            replaceNegativeZeroes(this[v].coefficients);
+            replaceNegativeZeroes(this[v]._coefficients);
         });
     }
 
     /**
-     * Evaluates the Diophantine Equation at a certain point in the
-     * parametric space. Always equals this.solution.
+     * Evaluates the equation by plugging in an integer for every
+     * parameter. This will always be equal to this._solution.
      * @param {...number} values
      */
-    evaluateAt(...values) {
-        if (values.length !== this.parameters.length)
-            throw new Error("This equation needs a list of " + this.parameters.length +
-                " values for " + this.parameters.length + " parameters.");
+    evalWithParameters(...values) {
+        if (values.length !== this._parameters.length)
+            throw new Error("This equation needs a list of " + this._parameters.length +
+                " values for " + this._parameters.length + " parameters.");
 
         let sum = 0;
-        this.variables.forEach((v, index) => {
-            sum += this[v].evaluateAt(...values) * this.coefficients[index];
+        this._variables.forEach((v, index) => {
+            sum += this[v].evalWithParameters(...values) * this._coefficients[index];
         });
         return sum;
     }
 
     /**
-     * Evaluates the Diophantine Equation at a certain point in the
-     * domain space. Will not equal this.solution unless the point
-     * is a solution for the parametric space.
+     * Evaluates the equation by plugging in an integer for every
+     * variable. This will not always be equal to this._solution.
      * @param {...number} values
      */
-    evaluateAtDomain(...values) {
-        if (values.length !== this.variables.length)
-            throw new Error("This equation needs a list of " + this.variables.length +
-                " values for " + this.variables.length + " variables.");
+    evalWithVariables(...values) {
+        if (values.length !== this._variables.length)
+            throw new Error("This equation needs a list of " + this._variables.length +
+                " values for " + this._variables.length + " variables.");
 
         let sum = 0;
-        for (let i = 0; i < this.coefficients.length; i++)
-            sum += this.coefficients[i] * values[i];
+        for (let i = 0; i < this._coefficients.length; i++)
+            sum += this._coefficients[i] * values[i];
         return sum;
     }
 
     /**
-     * Returns a string representation of the DiophantineEquation object.
+     * Returns a randomly chosen set of integers that make the
+     * Diophantine Equation true.
+     */
+    generateValues(min = 0, max = 100) {
+        // TODO: Change from bounds on the parameters to bounds on the integers returned
+
+        let variableValues = [];
+        const parameterValues = [1].concat(Array(this._parameters.length).fill(1)
+            .map(e => Math.floor(Math.random() * (max - min + 1)) + min));
+
+        this._variables.forEach(v => {
+            let sum = 0;
+            for (let i = 0; i < this[v]._coefficients.length; i++) {
+                sum += this[v]._coefficients[i] * parameterValues[i];
+            }
+            variableValues.push(sum);
+        });
+        return variableValues;
+    }
+
+    /**
+     * Returns a string representation of the DiophantineEquation
+     * object.
      */
     toString() {
         let string = "";
 
-        for (let i = 0; i < this.coefficients.length; i++) {
+        for (let i = 0; i < this._coefficients.length; i++) {
             string +=
-                this.coefficients[i].toString() +
-                this.variables[i].toString();
+                this._coefficients[i].toString() +
+                this._variables[i].toString();
             string +=
-                this.coefficients[i + 1] !== undefined ? " + " : " = " + this.solution;
+                this._coefficients[i + 1] !== undefined ? " + " : " = " + this._solution;
         }
         return string;
     }
@@ -153,7 +174,7 @@ export function returnDiophantineEquation(equation) {
 
 /**
  * Takes a linear diophantine equation in the form of a string and
- * extracts the coefficients, variables, and solution.
+ * extracts the coefficients, _variables, and solution.
  *
  * Checks for type mismatch, bad characters, repeated variables,
  * and more. Add more checks to this!
@@ -241,6 +262,22 @@ function replaceNegativeZeroes(values) {
     }
 }
 
-const equation = new DiophantineEquation("4x - 9y - 1z + 66t + 4l = -3");
-console.log(equation);
-console.log(equation.y.toString());
+/**
+ * Shuffles an array using the Fisher-Yates algorithm.
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+
+const equation = new DiophantineEquation("4x - 8y - 6z = -4");
+
+// console.log(equation);
+console.log(equation.x.toString())
+console.log(equation.y.toString())
+console.log(equation.z.toString())
+console.log(equation.generateValues());

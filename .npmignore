@@ -1,0 +1,8 @@
+# .npmignore
+assets/
+bench/
+
+main.tex
+demo.js
+demo.html
+
