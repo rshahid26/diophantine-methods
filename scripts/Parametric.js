@@ -7,14 +7,14 @@ export class ParametricEquation {
     /**
      * Constructs a Parametric Equation object.
      * @param {Array.<number>} coefficients
-     * @param {DiophantineEquation} DiophantineEquation
+     * @param {DiophantineEquation} diophantineEquation
      */
-    constructor(coefficients, DiophantineEquation) {
-        while (coefficients.length !== DiophantineEquation._coefficients.length)
+    constructor(coefficients, diophantineEquation) {
+        while (coefficients.length !== diophantineEquation._coefficients.length)
             coefficients.push(0);
 
         this._coefficients = coefficients;
-        this._parameters = DiophantineEquation._parameters;
+        this._parameters = diophantineEquation._parameters;
     }
 
     /**
@@ -37,13 +37,27 @@ export class ParametricEquation {
     /**
      * Evaluates the Parametric Equation at a certain point in the
      * domain space.
-     * @param {...number} values
+     * @param {Array.<number>} values
      */
-    evalWithParameters(...values) {
+    evalWithParameters(values) {
         let sum = this._coefficients[0];
         for (let i = 1; i < this._coefficients.length; i++)
             sum += this._coefficients[i] * values[i - 1];
 
         return sum;
+    }
+
+    /**
+     * Returns the coefficients of the Parametric Equation.
+     */
+    getCoefficients() {
+        return this._coefficients;
+    }
+
+    /**
+     * Returns the parameters of the Parametric Equation.
+     */
+    getParameters() {
+        return this._parameters;
     }
 }

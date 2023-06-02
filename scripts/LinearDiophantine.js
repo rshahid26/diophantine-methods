@@ -26,7 +26,6 @@ export class DiophantineEquation {
         this._updateParametrics();
     }
 
-
     /**
      * Copy old Parametric Equations to a new set of user-defined
      * variables. Must be one character each.
@@ -96,9 +95,9 @@ export class DiophantineEquation {
     /**
      * Evaluates the equation by plugging in an integer for every
      * parameter. This will always be equal to this._solution.
-     * @param {...number} values
+     * @param {Array.<number>} values
      */
-    evalWithParameters(...values) {
+    evalWithParameters(values) {
         if (values.length !== this._parameters.length)
             throw new Error("This equation needs a list of " + this._parameters.length +
                 " values for " + this._parameters.length + " parameters.");
@@ -113,9 +112,9 @@ export class DiophantineEquation {
     /**
      * Evaluates the equation by plugging in an integer for every
      * variable. This will not always be equal to this._solution.
-     * @param {...number} values
+     * @param {Array.<number>} values
      */
-    evalWithVariables(...values) {
+    evalWithVariables(values) {
         if (values.length !== this._variables.length)
             throw new Error("This equation needs a list of " + this._variables.length +
                 " values for " + this._variables.length + " variables.");
@@ -130,7 +129,7 @@ export class DiophantineEquation {
      * Returns a randomly chosen set of integers that make the
      * Diophantine Equation true.
      */
-    generateValues(min = 0, max = 100) {
+    randomSolution(min = 0, max = 100) {
         // TODO: Change from bounds on the parameters to bounds on the integers returned
 
         let variableValues = [];
@@ -148,6 +147,69 @@ export class DiophantineEquation {
     }
 
     /**
+     * Returns the least positive solution to a Diophantine
+     * Equation by minimizing its magnitude.
+     */
+    leastPositiveSolution() {
+        let r = 0;
+        while (true) {
+            const vectors = getMinimalCoordinates(this.getVariables().length, r)
+                .sort((a, b) =>
+                a.reduce((total, value) => total + value, 0) -
+                b.reduce((total, value) => total + value, 0)
+            );
+            for (let i = 0; i < vectors.length; i++) {
+                if (this.evalWithVariables(vectors[i]) === this._solution)
+                    return vectors[i];
+            }
+            r++;
+        }
+    }
+
+    /**
+     * Returns the least positive solution to a Diophantine
+     * Equation by minimizing the sum of its coordinates.
+     */
+    leastPositiveMagnitude() {
+        let r = 0;
+        while (true) {
+            const vectors = getMinimalCoordinates(this.getVariables().length, r)
+                .sort((a, b) =>
+                a.reduce((total, value) => total + value * value, 0) -
+                b.reduce((total, value) => total + value * value, 0)
+            );
+            for (let i = 0; i < vectors.length; i++) {
+                if (this.evalWithVariables(vectors[i]) === this._solution)
+                    return vectors[i];
+            }
+            r++;
+        }
+    }
+
+    /**
+     * Returns a map of ratios between the parametric equations of
+     * the Diophantine Equation.
+     */
+    getRatios() {
+        let history = [];
+        for (let v1 = 0; v1 < this._variables.length; v1++) {
+            for (let v2 = v1 + 1; v2 < this._variables.length; v2++) {
+
+                if (v1 === v2) continue;
+                for (let i = 1; i < this._variables.length; i++) {
+                    const c1 = this[this._variables[v1]].getCoefficients()[i];
+                    const c2 = this[this._variables[v2]].getCoefficients()[i];
+
+                    if (c1 === 0 || c2 === 0) continue;
+                    history.push([this._variables[v1], this._variables[v2],
+                        this.getParameters()[i - 1], Math.abs(c1 / c2)]);
+                }
+            }
+        }
+        return history;
+    }
+
+    /**
      * Returns a string representation of the DiophantineEquation
      * object.
      */
@@ -162,6 +224,34 @@ export class DiophantineEquation {
                 this._coefficients[i + 1] !== undefined ? " + " : " = " + this._solution;
         }
         return string;
+    }
+
+    /**
+     * Returns the coefficients of the Diophantine Equation.
+     */
+    getCoefficients() {
+        return this._coefficients;
+    }
+
+    /**
+     * Returns the variables of the Diophantine Equation.
+     */
+    getVariables() {
+        return this._variables;
+    }
+
+    /**
+     * Returns the solution of the Diophantine Equation.
+     */
+    getSolution() {
+        return this._solution;
+    }
+
+    /**
+     * Returns the parameters of the Diophantine Equation.
+     */
+    getParameters() {
+        return this._parameters;
     }
 }
 
@@ -253,7 +343,7 @@ function solveLinearBinomialEquation(coefficients, solution) {
 
 /**
  * Replace all instances of -0 with 0. Caused by alternating
- * signs when calculating Parametric Equation coefficients. 
+ * signs when calculating Bezout coefficients.
  * @param {Array.<number>} values
  */
 function replaceNegativeZeroes(values) {
@@ -273,11 +363,25 @@ function shuffleArray(array) {
     return array;
 }
 
+/**
+ * Generates the set of n-dimensional vectors that are within
+ * a sphere of radius r using a depth-first search.
+ */
+function getMinimalCoordinates(n, r) {
+    let coordinates = [];
+    let vector = new Array(n).fill(0);
 
-const equation = new DiophantineEquation("4x - 8y - 6z = -4");
-
-// console.log(equation);
-console.log(equation.x.toString())
-console.log(equation.y.toString())
-console.log(equation.z.toString())
-console.log(equation.generateValues());
+    function dfs(index) {
+        if (index === n) {
+            if (vector.reduce((total, value) => total + value * value, 0) <= r * r)
+                coordinates.push([...vector]);
+            return;
+        }
+        for (let i = 0; i <= r; i++) {
+            vector[index] = i;
+            dfs(index + 1);
+        }
+    }
+    dfs(0);
+    return coordinates;
+}

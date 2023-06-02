@@ -36,7 +36,7 @@ export function evaluateContinuedFraction(notation, index = 0) {
 
 /**
  * Returns the most optimal rational approximation of any real number
- * one it's within "epsilon" distance.
+ * once it's within "epsilon" distance.
  */
 export function continuedApproximation(realNum, epsilon) {
     return evaluateContinuedFraction(getContinuedFraction(realNum, epsilon));
