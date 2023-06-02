@@ -1,7 +1,7 @@
-import { continuedApproximation } from "./scripts/dirichlet.js";
-import { dirichletApproximation } from "./scripts/dirichlet.js";
-import { fareyApproximation } from "./scripts/farey.js";
-import { solveDiophantineEquation } from "./scripts/LinearDiophantine.js";
+import { continuedApproximation } from "./src/dirichlet.js";
+import { dirichletApproximation } from "./src/dirichlet.js";
+import { fareyApproximation } from "./src/farey.js";
+import { solveDiophantineEquation } from "./src/LinearDiophantine.js";
 
 document.getElementsByTagName("form")[0].addEventListener("submit", (e) => {
     e.preventDefault();

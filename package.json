@@ -5,13 +5,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "d": "node scripts/dirichlet.js",
-    "f": "node scripts/farey.js",
-    "l": "node scripts/LinearDiophantine.js",
+    "d": "node src/dirichlet.js",
+    "f": "node src/farey.js",
+    "l": "node src/LinearDiophantine.js",
     "b": "node bench/simulations.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
-  "keywords": [],
+  "keywords": ["math", "diophantine", "equations", "symbolic", "bezout", "approximations", "rational", "parametric", "farey", "dirichlet", "continued-fractions", "totient"],
   "author": "rs26",
   "license": "MIT",
   "repository": {

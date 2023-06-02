@@ -1,4 +1,4 @@
-import { returnDiophantineEquation } from "../scripts/LinearDiophantine.js";
+import { returnDiophantineEquation } from "../src/LinearDiophantine.js";
 
 describe("DiophantineEquation", () => {
     testCases.forEach((testCase, index) => {

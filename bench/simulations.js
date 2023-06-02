@@ -1,8 +1,8 @@
 import fs from 'fs';
-import { getContinuedFraction, continuedApproximation } from "../scripts/ContinuedFractions.js"
-import { dirichletApproximation } from "../scripts/dirichlet.js";
-import { fareyApproximation } from "../scripts/farey.js";
-import { nearestFareyFraction } from "../scripts/farey.js";
+import { getContinuedFraction, continuedApproximation } from "../src/ContinuedFractions.js"
+import { dirichletApproximation } from "../src/dirichlet.js";
+import { fareyApproximation } from "../src/farey.js";
+import { nearestFareyFraction } from "../src/farey.js";
 
 const testData = "bench/testdata.txt";
 const output = "bench/output.txt";
