@@ -43,7 +43,7 @@ The vector with the least positive magnitude (point B) is the vector nearest the
 
 The vector with the least positive solution is the nearest projection onto one of the ParametricEquation planes (point A).
 
-<img src="assets/diophantine-plane.png" alt="Diagram Description" width="200" height="200">
+<img src="assets/diophantine-plane.png" alt="Diagram Description" width="200" height="200" style="display: block;">
 
 (Image from [Geogebra](https://www.geogebra.org/3d?lang=en).)
 
