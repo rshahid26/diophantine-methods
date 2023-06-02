@@ -6,7 +6,7 @@ Solve Diophantine Equations and Diophantine Approximations. Zero dependencies an
 npm install diophantine-methods
 ```
 ## Diophantine Equations
-Turn an equation written symbolically into a DiophantineEquation object. The variables of the object are parameterized and manipulated in terms of free variables t_1, t_2, ... t_{n-1}.
+Turn a linear equation written symbolically into a DiophantineEquation object. The variables of the object are parameterized and manipulated in terms of free variables t_1, t_2, ... t_{n-1}.
 ```javascript
 import { returnDiophantineEquation } from 'diophantine-methods'
 
@@ -31,10 +31,16 @@ equation.getVariables().forEach((v, index) => {
 });
 console.log(solutions);     // [30, 5, 0] or 30 nickels, 5 dimes, 0 quarters.
 
+// Evaluate equations.
+equation.evalWithVariables([30, 5, 0]); // 200. It works!
+
 // Generate solutions directly.
-equation.randomSolution();          // [715, -205, -53]
-equation.leastPositiveSolution();   // [0, 0, 8] 
-equation.leastPositiveMagnitude();  // [1, 2, 7]
+equation.randomSolution();              // [715, -205, -53]
+equation.leastPositiveSolution();       // [0, 0, 8] 
+equation.leastPositiveMagnitude();      // [1, 2, 7]
+
+// Not all diophantine equations are solvable.
+equation2 = returnDiophantineEquation("6n - 12d + 8q = 5"); // "No solutions."
 ```
 ### Geometric Interpretation
 The ParametricEquation objects return n-dimensional planes that only intersect at integer coordinates.

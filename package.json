@@ -11,7 +11,8 @@
     "b": "node bench/simulations.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
-  "keywords": ["math", "diophantine", "equations", "symbolic", "bezout", "approximations", "rational", "parametric", "farey", "dirichlet", "continued-fractions", "totient"],
+  "keywords": ["math", "diophantine", "equations", "linear-equations", "equation-solver", "linear-algebra", "algebra", "symbolic", "planes", "surfaces", "bezout", "approximations", "rational", "number-theory", "parametric", "farey", "dirichlet", "continued-fractions", "totient"],
+
   "author": "rs26",
   "license": "MIT",
   "repository": {
