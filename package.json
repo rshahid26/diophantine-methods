@@ -1,8 +1,9 @@
 {
   "name": "diophantine-methods",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "description": "Solve Diophantine Equations and Diophantine Approximations.",
   "type": "module",
-  "main": "scripts/LinearDiophantine.js",
+  "main": "index.js",
   "scripts": {
     "d": "node scripts/dirichlet.js",
     "f": "node scripts/farey.js",
@@ -21,7 +22,6 @@
     "url": "https://github.com/rshahid26/diophantine/issues"
   },
   "homepage": "https://github.com/rshahid26/diophantine#readme",
-  "description": "",
   "devDependencies": {
     "jest": "^29.5.0"
   }

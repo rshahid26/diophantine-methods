@@ -1,10 +1,11 @@
 /*
 Diophantine Equations
-import { DiophantineEquation } from 'diophantine-methods';
 import { returnDiophantineEquation } from 'diophantine-methods';
+OR
+import { DiophantineEquation } from 'diophantine-methods';
  */
 
 /*
 Diophantine Approximations
-import * from 'diophantine-methods';
+import * as methods from 'diophantine-methods';
  */

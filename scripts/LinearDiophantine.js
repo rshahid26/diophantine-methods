@@ -385,8 +385,3 @@ function getMinimalCoordinates(n, r) {
     dfs(0);
     return coordinates;
 }
-
-const equation = returnDiophantineEquation("5n + 10d + 25q = 200");
-console.log(equation.n.toString());
-console.log(equation.d.toString());
-console.log(equation.q.toString());
