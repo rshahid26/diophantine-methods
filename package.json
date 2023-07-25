@@ -1,6 +1,6 @@
 {
   "name": "diophantine-methods",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Solve Diophantine Equations and Diophantine Approximations.",
   "type": "module",
   "main": "index.js",
@@ -11,8 +11,27 @@
     "b": "node bench/simulations.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
-  "keywords": ["math", "diophantine", "equations", "linear-equations", "equation-solver", "linear-algebra", "algebra", "symbolic", "planes", "surfaces", "bezout", "approximations", "rational", "number-theory", "parametric", "farey", "dirichlet", "continued-fractions", "totient"],
-
+  "keywords": [
+    "math",
+    "diophantine",
+    "equations",
+    "linear-equations",
+    "equation-solver",
+    "linear-algebra",
+    "algebra",
+    "symbolic",
+    "planes",
+    "surfaces",
+    "bezout",
+    "approximations",
+    "rational",
+    "number-theory",
+    "parametric",
+    "farey",
+    "dirichlet",
+    "continued-fractions",
+    "totient"
+  ],
   "author": "rs26",
   "license": "MIT",
   "repository": {
@@ -24,6 +43,6 @@
   },
   "homepage": "https://github.com/rshahid26/diophantine#readme",
   "devDependencies": {
-    "jest": "^29.5.0"
+    "jest": "^29.6.1"
   }
 }
