@@ -20,10 +20,10 @@ equation.getSolution();     // 200
 // Returns a ParametricEquation object.
 equation.n;
 
-// View the parameteric space and evaluate it for integer values of t₁, t₂.
-equation.n.toString();      // 40 + 5t₁ + 10t₂
-equation.d.toString();      // -5t₂
-equation.q.toString();      // -1t₁
+// View the parameteric space and evaluate it for integer values of t_1, t_2.
+equation.n.toString();      // 40 + 5t_1 + 10t_2
+equation.d.toString();      // -5t_2
+equation.q.toString();      // -1t_1
 
 const solutions = [];
 equation.getVariables().forEach((v, index) => {
